@@ -27,6 +27,10 @@ Route::get('province', 'IndonesianRegionController@getProvince')->name('province
 Route::get('cities/{provinceId}', 'IndonesianRegionController@getCity')->name('cities');
 Route::get('districts/{cityId}', 'IndonesianRegionController@getDistrict')->name('district');
 Route::get('subdistricts/{districtId}', 'IndonesianRegionController@getSubDistrict')->name('subdistrict');
+Route::get('payment-method', 'AuthController@paymentMethod')->name('paymentmethod');
+Route::get('payment-method/{id}', 'AuthController@paymentMethod');
+Route::post('alamat-all', 'AuthController@alamatAllIn')->name('alamatall');
+Route::post('alamat-all/{id}', 'AuthController@alamatAllIn');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });

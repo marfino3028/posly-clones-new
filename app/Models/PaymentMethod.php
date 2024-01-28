@@ -12,7 +12,7 @@ class PaymentMethod extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'title','is_default'
+        'title','is_default','nama_pemilik','no_rekening'
     ];
 
     protected $casts = [

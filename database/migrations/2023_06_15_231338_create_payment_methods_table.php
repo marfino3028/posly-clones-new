@@ -17,6 +17,8 @@ class CreatePaymentMethodsTable extends Migration {
 		{
 			$table->integer('id', true);
 			$table->string('title', 192);
+			$table->string('no_rekening', 192);
+			$table->string('nama_pemilik', 192);
 			$table->boolean('is_default')->default(0);
 			$table->timestamps(6);
 			$table->softDeletes();

@@ -16,12 +16,62 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\PersonalAccessTokenResult;
 use Illuminate\Support\Facades\Config;
+use App\Models\PaymentMethod;
+use App\Models\UserAddress;
 
 class AuthController extends Controller
 {
     use HasApiTokens,Notifiable;
+
+    function paymentMethod($id = null)  {
+        if ($id) {
+            $payment_methods = PaymentMethod::where('deleted_at', '=', null)->where('id',$id)->orderBy('id', 'desc')->get();
+        } else {
+            $payment_methods = PaymentMethod::where('deleted_at', '=', null)->orderBy('id', 'desc')->get();
+        }
+        return response()->json($payment_methods);
+    }
+    function alamatAllIn(Request $request, $addressId = null) {
+        {
+            if (!empty($request->users_id) && !empty($request->alamat) && empty($addressId)) {
+                
+                $userAddress = new UserAddress([
+                    'users_id' => $request->users_id, 
+                    'villages' => $request->villages,
+                    'district' => $request->district,
+                    'city' => $request->city,
+                    'province' => $request->province,
+                    'country' => $request->country,
+                    'alamat' => $request->alamat,
+                    'kode_pos' => $request->kode_pos,
+                ]);                        
+                $userAddress->save();
+        
+                return response()->json(['message' => 'Address created successfully'], 201);
+            } elseif (!empty($addressId)) {
+                $userAddress = UserAddress::find($addressId);
+                if (!$userAddress) {
+                    return response()->json(['error' => 'Address not found'], 404);
+                }
+                $userAddress->villages = $request->input('villages');
+                $userAddress->district = $request->input('district');
+                $userAddress->city = $request->input('city');
+                $userAddress->province = $request->input('province');
+                $userAddress->country = $request->input('country');
+                $userAddress->alamat = $request->input('alamat');
+                $userAddress->kode_pos = $request->input('kode_pos');
+
+                $userAddress->save();
+                return response()->json(['message' => 'Address updated successfully'], 201);
+            } else {
+                $userAddress = UserAddress::where('users_id',$request->users_id)->get();   
+                return response()->json($userAddress);            
+            }
+                        
+        }
+    }
     public function confirmEmail($token)
-{    
+{
     $user = User::where('email_confirmation_token', $token)->first();    
     if (!$user) {
         return response()->json(['error' => 'Invalid confirmation token'], 400);
