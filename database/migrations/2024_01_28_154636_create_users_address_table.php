@@ -15,9 +15,7 @@ class CreateUsersAddressTable extends Migration
     {
         Schema::create('users_address', function (Blueprint $table) {
             $table->id();
-            $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('villages', 192);
             $table->string('district', 192);
             $table->string('city', 192);
@@ -25,7 +23,6 @@ class CreateUsersAddressTable extends Migration
             $table->string('country', 192);
             $table->string('alamat', 192);
             $table->string('kode_pos', 192);
-            $table->timestamps();
             $table->timestamps();
         });
     }
