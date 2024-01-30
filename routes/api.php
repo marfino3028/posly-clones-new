@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\HomeCtr;
 use App\Http\Controllers\Backend\PurchaseCartCtr;
 use App\Http\Controllers\Backend\PurchaseCtr;
+use App\Http\Controllers\Backend\SalesCtr;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,14 +36,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+
+
 Route::get('/products', [HomeCtr::class, 'index']);
 Route::get('/product/{id}', [HomeCtr::class, 'detail']);
+Route::post('/sales', [SalesCtr::class, 'create']);
 
 
-Route::post('/cart', [PurchaseCartCtr::class, 'create']);
-Route::get('/cart', [PurchaseCartCtr::class, 'cartbyid']);
-Route::post('/purchase', [PurchaseCtr::class, 'create']);
 
+// Route::post('/cart', [PurchaseCartCtr::class, 'create']);
+// Route::get('/cart', [PurchaseCartCtr::class, 'cartbyid']);
+// Route::post('/purchase', [PurchaseCtr::class, 'create']);
+// 
 //get categories
 Route::get('categories', function (Request $request) {
   $perPage = $request->perPage ?: 7;
