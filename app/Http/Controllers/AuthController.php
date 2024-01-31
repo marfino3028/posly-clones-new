@@ -18,6 +18,7 @@ use Laravel\Passport\PersonalAccessTokenResult;
 use Illuminate\Support\Facades\Config;
 use App\Models\PaymentMethod;
 use App\Models\UserAddress;
+use App\Notifications\ConfirmationNotification;
 
 class AuthController extends Controller
 {
@@ -132,7 +133,7 @@ class AuthController extends Controller
 
         // Kirim email konfirmasi
         event(new Registered($user));
-        Mail::to($user->email)->send(new ConfirmationEmail($user, $confirmationLink));
+        $user->notify(new ConfirmationNotification($user, $confirmationLink));
         
         return response()->json(['message' => 'Registration successful. Confirmation email sent.'], 201);
     }
