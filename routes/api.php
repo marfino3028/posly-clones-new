@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\PurchaseCartCtr;
 use App\Http\Controllers\Backend\PurchaseCtr;
 use App\Http\Controllers\Backend\SalesCtr;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,15 +33,17 @@ Route::get('payment-method', 'AuthController@paymentMethod')->name('paymentmetho
 Route::get('payment-method/{id}', 'AuthController@paymentMethod');
 Route::post('alamat-all', 'AuthController@alamatAllIn')->name('alamatall');
 Route::post('alamat-all/{id}', 'AuthController@alamatAllIn');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
 
-
-Route::get('/products', [HomeCtr::class, 'index']);
-Route::get('/product/{id}', [HomeCtr::class, 'detail']);
-Route::post('/sales', [SalesCtr::class, 'create']);
+Route::middleware(['auth:api'])->group(function () {  
+  Route::get('/products', [HomeCtr::class, 'index']);
+  Route::get('/product/{id}', [HomeCtr::class, 'detail']);
+  Route::post('/sales', [SalesCtr::class, 'create']);
+});
 
 
 

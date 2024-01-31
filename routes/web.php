@@ -43,8 +43,8 @@ Route::middleware(['XSS'])->group(function () {
     Route::get('/shipping', [\App\Http\Controllers\Frontend\HomeController::class, 'shipping']);
     Route::get('/payment', [\App\Http\Controllers\Frontend\HomeController::class, 'payment']);
     Route::get('/success', [\App\Http\Controllers\Frontend\HomeController::class, 'paymentSuccess']);
-    Route::get('/eccomerce/login', [\App\Http\Controllers\Frontend\HomeController::class, 'login']);
-    Route::get('/eccomerce/register', [\App\Http\Controllers\Frontend\HomeController::class, 'register']);
+    Route::get('/ecommerce/login', [\App\Http\Controllers\Frontend\HomeController::class, 'login'])->name('ecommerce.login');
+    Route::get('/ecommerce/register', [\App\Http\Controllers\Frontend\HomeController::class, 'register'])->name('ecommerce.register');
 
     Route::get('/dashboard/admin', "HomeController@RedirectToLogin");
     Route::get('switch/language/{lang}', 'LocalController@languageSwitch')->name('language.switch');

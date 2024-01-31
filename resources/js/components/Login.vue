@@ -37,7 +37,7 @@ const errors = ref([])
 const login = () => {
     axios.post(`${baseUrl}/login`, {
         email: email.value,
-        password: password.value
+        password: password.value,        
     }).then(response => {
         console.log(response.data)
         localStorage.setItem('token', response.data.token)
@@ -45,9 +45,8 @@ const login = () => {
     }).catch(error => {
         errors.value = error.response.data.errors
     })
-
-    // window.location.href = '/?test=1'
 }
+
 
 </script>
 <style scoped>

@@ -5,9 +5,12 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
+use Laravel\Passport\Client;
+use Laravel\Passport\Token;
 
 class AuthServiceProvider extends ServiceProvider
 {
+    
     /**
      * The policy mappings for the application.
      *
@@ -24,13 +27,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Passport::useClientModel(Client::class);
+        Passport::useTokenModel(Token::class);
         $this->registerPolicies();
-
+        
         Gate::before(function ($user, $ability) {
             if ($user->hasRole('Super-Admin')) {
                 return true;
             }
-        });
+        });        
         Passport::routes();
     }
 }
