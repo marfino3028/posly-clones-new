@@ -20,8 +20,8 @@ class CreateSalesTable extends Migration {
 			$table->dateTime('date');
 			$table->string('Ref', 192);
 			$table->boolean('is_pos')->nullable()->default(0);
-			$table->integer('client_id')->index('sale_client_id');
-			$table->integer('warehouse_id')->nullable()->index('warehouse_id_sale');
+			// $table->integer('client_id')->index('sale_client_id');
+			// $table->integer('warehouse_id')->nullable()->index('warehouse_id_sale');
 			$table->float('tax_rate', 10, 0)->nullable()->default(0);
 			$table->float('TaxNet', 10, 0)->nullable()->default(0);
 			$table->float('discount', 10, 0)->nullable()->default(0);
@@ -31,6 +31,7 @@ class CreateSalesTable extends Migration {
 			$table->float('GrandTotal', 10, 0)->default(0);
 			$table->float('paid_amount', 10, 0)->default(0);
 			$table->string('payment_statut', 192);
+			$table->string('transfer_evidence')->nullable();
 			$table->string('statut', 191);
 			$table->text('notes')->nullable();
 			$table->timestamps(6);
@@ -46,7 +47,7 @@ class CreateSalesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('sales');
+        Schema::dropIfExists('sales');
 	}
 
 }
