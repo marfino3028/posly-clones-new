@@ -7,10 +7,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductVariantOption;
 use App\Models\Sale;
-use App\Models\Client;
-use DB;
 use App\Models\SaleDetail;
-use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,22 +16,19 @@ class SalesCtr extends Controller
 {
     public function Create(Request $request)
     {   
+
         $products = $request->json('products')?? [];
-        $client_id = Client::where('user_id',Auth::user()->id)->pluck('id')->first();
-        $warehouse_id = DB::table('product_warehouse')->where('product_id',$products[0]['product_id'])->pluck('warehouse_id')->first();    
         $sales= new Sale();
         $sales->user_id = Auth::user()->id;
         $sales->date = date('Y-m-d H:i:s');
         $sales->ref = $request->ref;
-        $sales->client_id = $client_id;
-        $sales->warehouse_id = $warehouse_id;
         $sales->save();
 
         $dataDetails=[];
 
         foreach($products as $product){
 
-            $dataProduct =  Product::find($product['product_id']);            
+            $dataProduct =  Product::find($product['product_id']);
             $salesDetail= new SaleDetail();
             
             $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet )- $dataProduct->discount ;
@@ -47,8 +41,8 @@ class SalesCtr extends Controller
             $salesDetail->discount = $dataProduct->discount;
             $salesDetail->save();
 
+            // ambil data sales detail id 
             $dataDetails[]=$salesDetail->id;
-
         };
             $grandTotal = SaleDetail::whereIn('id', $dataDetails)->sum('total');
            //  sales detail menyimpan 1 product    
