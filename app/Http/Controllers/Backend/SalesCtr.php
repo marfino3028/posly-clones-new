@@ -64,4 +64,14 @@ class SalesCtr extends Controller
             'data' => $sales,
         ]);
     }
+
+    public function salesDetail()
+    {
+
+        $data = Sale::with('details')->where('user_id', Auth::user()->id)->get();
+        return response()->json([
+            'message' => 'Get data successfully',
+            'data' => $data,
+        ]);
+    }
 }
