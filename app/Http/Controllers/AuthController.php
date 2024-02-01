@@ -18,6 +18,7 @@ use Laravel\Passport\PersonalAccessTokenResult;
 use Illuminate\Support\Facades\Config;
 use App\Models\PaymentMethod;
 use App\Models\UserAddress;
+use App\Models\Client;
 use App\Notifications\ConfirmationNotification;
 
 class AuthController extends Controller
@@ -95,13 +96,6 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'no_hp' => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
-            'alamat' => 'required|string|max:255',
-            'kode_pos' => 'required|string|max:255',
-            'villages' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'province' => 'required|string|max:255',
-            'country' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
@@ -123,6 +117,21 @@ class AuthController extends Controller
             'province' => $request->province,
             'country' => $request->country,
             'role_users_id' => 3
+        ]);
+        $client = Client::create([
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat,
+            'kode_pos' => $request->kode_pos,
+            'villages' => $request->villages,
+            'district' => $request->district,
+            'city' => $request->city,
+            'province' => $request->province,
+            'country' => $request->country,
+            'user_id' => $user->id,
+            'username' => $request->username ?? null,
+            'code' => 1,
+            'status' => 1,
+            'email' => $request->email,
         ]);
         $token = $user->createToken('emailConfirmation')->accessToken;
         $user->update([
