@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\HomeCtr;
+use App\Http\Controllers\Backend\PaymentCtr;
 use App\Http\Controllers\Backend\PurchaseCartCtr;
 use App\Http\Controllers\Backend\PurchaseCtr;
 use App\Http\Controllers\Backend\SalesCtr;
@@ -42,7 +43,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware(['auth:api'])->group(function () {  
   Route::get('/products', [HomeCtr::class, 'index']);
   Route::get('/product/{id}', [HomeCtr::class, 'detail']);
+
   Route::post('/sales', [SalesCtr::class, 'create']);
+  Route::get('/sales-detail', [SalesCtr::class, 'salesDetail']);
+
+  Route::get('/payment', [PaymentCtr::class, 'index']);
+  Route::post('/payment-upload', [PaymentCtr::class, 'upload']);
+
+
 });
 
 
