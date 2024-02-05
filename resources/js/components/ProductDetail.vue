@@ -77,6 +77,14 @@
                         </option>
                     </select>
                 </div>
+                <div class="product-size">
+                    <h4>Variasi:</h4>
+                    <select v-model="form.size" class="form-select" aria-label="Default select example">
+                        <option selected>Open this select menu</option>
+                        <option v-for="item in productDetail.variants" :key="item.id" :value="item.id">{{ item.name }}
+                        </option>
+                    </select>
+                </div>
 
             </div>
         </section>

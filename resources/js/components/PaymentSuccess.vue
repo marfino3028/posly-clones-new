@@ -67,39 +67,7 @@
                 </ul>
             </div>
 
-            <section class="section-t-space-3">
-                <div class="custom-container">
-                    <div class="order-detail-box order-detail-box-2">
-                        <div class="product-title">
-                            <h4>Order Details:</h4>
-                        </div>
-                        <ul class="order-price-list">
-                            <li>
-                                <div class="order-price-box">
-                                    <h4 class="name">Total Harga</h4>
-                                    <h4 class="price">$25.00</h4>
-                                </div>
-                            </li>
-
-                            <li>
-                                <div class="order-price-box">
-                                    <h4 class="name">Potongan Discount</h4>
-                                    <h4 class="price success">-$5.00</h4>
-                                </div>
-                            </li>
-
-
-
-                            <li class="total-price">
-                                <div class="order-price-box">
-                                    <h4 class="name">Total Harga</h4>
-                                    <h4 class="price">$23.00</h4>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            <order-detail-vue></order-detail-vue>
 
             <hr>
 
@@ -118,7 +86,9 @@
                             </div>
                         </li>
                     </ul>
+                    <button class="btn btn-primary mt-3" style="float: right;">Upload</button>
                 </div>
+
             </div>
         </div>
     </section>

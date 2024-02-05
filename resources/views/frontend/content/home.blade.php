@@ -16,5 +16,5 @@
 
     </div>
     <!-- Start Content End -->
-    @include('frontend.layouts.footer-nav')
+    {{-- @include('frontend.layouts.footer-nav') --}}
 @endsection

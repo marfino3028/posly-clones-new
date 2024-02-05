@@ -216,8 +216,8 @@
                         <div class="form-group col-md-4">
                             <label>{{ __('translate.Allow_PO') }} <span class="field_required">*</span></label>
                             <v-select placeholder="{{ __('translate.Choose_Method') }}" v-model="product.allow_po"
-                                      :reduce="(option) => option.value"
-                                      :options="[
+                                :reduce="(option) => option.value"
+                                :options="[
                                     { label: 'Ya', value: '1' },
                                     { label: 'Tidak', value: '0' }
                                 ]">
@@ -498,7 +498,7 @@
                     reader.onload = (e) => {
                         this.preview = e.target.result;
                     }
-                    this.image=input.files[0];
+                    this.image = input.files[0];
                     reader.readAsDataURL(input.files[0]);
                 }
             },
@@ -605,7 +605,14 @@
 
         },
         //-----------------------------Autoload function-------------------
-        created() {}
+        created() {
+            // this.variants = "test"›
+        },
+        watch: {
+            'variants': function(val) {
+                console.log(val)
+            }
+        }
 
     })
 </script>

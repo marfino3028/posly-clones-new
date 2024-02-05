@@ -60,7 +60,8 @@
 
         @include('frontend.layouts.footer-section')
 
-        @include('frontend.layouts.sidebar')
+        {{-- @include('frontend.layouts.sidebar') --}}
+        <sidebar-vue></sidebar-vue>
     </div>
 
 

@@ -74,38 +74,6 @@ const products = ref([
         qty: 1,
         price: 25,
         image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 5,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 6,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 7,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 8,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
     }
 ])
 

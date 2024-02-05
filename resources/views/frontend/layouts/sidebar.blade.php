@@ -7,7 +7,8 @@
 
         <div class="sidebar-profile">
             <div class="profile-image border shadow-sm">
-                <img src="{{ asset('assets/asset_frontend/images/ecommerce/dp.jpg') }}" class="img-fluid" alt="">
+                <img src="{{ asset('assets/asset_frontend/images/ecommerce/dp.jpg') }}" class="img-fluid"
+                    alt="">
             </div>
 
             <a href="profile.html" class="profile-name">
