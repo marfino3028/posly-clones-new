@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 
 class IndonesianRegionController extends Controller
 {
-    function getProvince(){
-        $province = \Indonesia::findProvince();
+    function getProvince()
+    {
+        $province = \Indonesia::allProvinces();
         return response()->json($province);
     }
     public function getCity(Request $request, $provinceId)

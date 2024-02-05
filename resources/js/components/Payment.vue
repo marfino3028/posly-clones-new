@@ -14,7 +14,7 @@
                                     <input value="1" type="radio" name="1" class="form-check-input" id="01">
                                     <label class="minha-table" for="01">
                                         <!-- <img src="{{ asset('assets/asset_frontend/images/pay/m-card.png') }}" alt=""> -->
-                                        <span>{{ payment.number }}</span>
+                                        <span>{{ payment.title }}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -48,8 +48,13 @@
     <order-detail-vue></order-detail-vue>
 </template>
 <script setup>
-import { reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { convertToThousands } from "../helper"
+import axios from 'axios'
+
+onMounted(() => {
+    getPaymentMethod()
+})
 
 const paymentMethodLists = ref([
     {
@@ -66,6 +71,16 @@ const paymentMethodLists = ref([
     },
 
 ])
+
+const getPaymentMethod = async () => {
+    const res = await axios.get('/api/payment-method')
+    paymentMethodLists.value = res.data
+}
+
+const getAlamat = async () => {
+    const res = await axios.get('/api/alamat-all')
+    addressLists.value = res.data
+}
 
 
 const addressLists = ref([
