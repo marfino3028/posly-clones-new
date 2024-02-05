@@ -41,8 +41,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware(['auth:api'])->group(function () {  
-  Route::get('/products', [HomeCtr::class, 'index']);
-  Route::get('/product/{id}', [HomeCtr::class, 'detail']);
+  
 
   Route::post('/sales', [SalesCtr::class, 'create']);
   Route::get('/sales-detail', [SalesCtr::class, 'salesDetail']);
@@ -52,6 +51,9 @@ Route::middleware(['auth:api'])->group(function () {
 
 
 });
+
+Route::get('/products', [HomeCtr::class, 'index']);
+  Route::get('/product/{id}', [HomeCtr::class, 'detail']);
 
 
 
