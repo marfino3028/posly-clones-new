@@ -606,7 +606,16 @@
         },
         //-----------------------------Autoload function-------------------
         created() {
+<<<<<<< HEAD
             console.log(this.variants)
+=======
+            // this.variants = "test"›
+        },
+        watch: {
+            'variants': function(val) {
+                console.log(val)
+            }
+>>>>>>> 99b7dbf (up to date)
         }
 
     })
