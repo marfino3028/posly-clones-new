@@ -16,6 +16,16 @@ class SalesCtr extends Controller
 {
     public function Create(Request $request)
     {   
+
+        // jika product nya sama tambah qty
+        // $grandTotal = DB::table('sales')
+        // ->select('sales.*')
+        // ->join('sale_details', 'sales.id', '=', 'sale_details.sale_id')
+        // ->where('sale.user_id', '=', $sales->id)
+        // ->where('sale_details.sale_id', '=', $sales->id)
+        // ->where('sale_details.product_id', '=', $sales->id);
+        
+
         $sales= new Sale();
         $sales->user_id = Auth::user()->id;
         $sales->date = date('Y-m-d H:i:s');
