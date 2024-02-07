@@ -36,17 +36,14 @@ class PaymentCtr extends Controller
 
         $fileName = "bukti_upload_{$uniqueCode}_{$date}.{$file->getClientOriginalExtension()}";
 
-        // Upload file to storage
-        $filePath = $file->storeAs('photos', $fileName, 'public');
+        // Upload file to public/transfer_evidence
+        $filePath =  $file->move(public_path('transfer_evidence'), $fileName);
 
-        // You can save $filePath to the database or perform any other actions here.
-
-        
         $data =Sale::where('id', $request->sale_id) // Gantilah 'id' dengan primary key yang sesuai
         ->update([
             'transfer_evidence' => $filePath,
-            'payment_statut' => $request->payment_status,
-            'statut' => $request->status,
+            'payment_statut' => "sudah_upload",
+            'statut' => "sudah_upload",
         ]);
 
         return response()->json([
