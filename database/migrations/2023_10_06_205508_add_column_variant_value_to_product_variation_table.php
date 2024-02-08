@@ -14,10 +14,10 @@ class AddColumnVariantValueToProductVariationTable extends Migration
     public function up()
     {
         Schema::table('product_variants', function (Blueprint $table) {
-            $table->string('variant_code')->nullable()->after('product_id');
-            $table->string('variant_name_type_barcode')->nullable()->after('variant_code');
-            $table->bigInteger('attribute_id')->after('variant_code')->nullable();
-            $table->bigInteger('attribute_value_id')->after('attribute_id')->nullable();
+            // $table->string('variant_code')->nullable()->after('product_id');
+            // $table->string('variant_name_type_barcode')->nullable()->after('variant_code');
+            // $table->bigInteger('attribute_id')->after('variant_code')->nullable();
+            // $table->bigInteger('attribute_value_id')->after('attribute_id')->nullable();
         });
     }
 
