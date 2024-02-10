@@ -17,7 +17,7 @@ class AddForeignKeysToSaleDetailsTable extends Migration {
 		{
 			$table->foreign('sale_id', 'Details_Sale_id')->references('id')->on('sales')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 			$table->foreign('product_id', 'sale_product_id')->references('id')->on('products')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-			$table->foreign('product_variant_id', 'sale_product_variant_id')->references('id')->on('product_variants')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+			// $table->foreign('product_variant_id', 'sale_product_variant_id')->references('id')->on('product_variants')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 			$table->foreign('sale_unit_id', 'sales_sale_unit_id')->references('id')->on('units')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 		});
 	}
@@ -34,7 +34,7 @@ class AddForeignKeysToSaleDetailsTable extends Migration {
 		{
 			$table->dropForeign('Details_Sale_id');
 			$table->dropForeign('sale_product_id');
-			$table->dropForeign('sale_product_variant_id');
+			// $table->dropForeign('sale_product_variant_id');
 			$table->dropForeign('sales_sale_unit_id');
 		});
 	}
