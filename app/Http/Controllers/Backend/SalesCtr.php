@@ -58,32 +58,71 @@ class SalesCtr extends Controller
             $saleDetailById = SaleDetail::where('sale_id', $saleIds->id)->get();
             $product_variant_id = json_encode($request->product_variant_id);
 
+            $isProductVariantIdMatched = false;
 
+            // Loop melalui setiap SaleDetail
             foreach ($saleDetailById as $saleDetail) {
-                $productVariants = $saleDetail->product_variant_id;
-
-                if ($productVariants === $product_variant_id) {
-                    // jika product variantnya sama 
-                    $dataProduct =  Product::with('variants')->find($request->product_id);
-
-                    $salesDetail = SaleDetail::find($saleDetail->id);
-                    $salesDetail->quantity = $saleDetail->quantity + $request->qty;
-                    $salesDetail->save();
-
-                    $grandTotal = DB::table('sales')
-                        ->join('sale_details', 'sales.id', '=', 'sale_details.sale_id')
-                        ->where('sales.id', '=', $saleIds->id)
-                        ->selectRaw('SUM(sale_details.total * sale_details.quantity) as totalXQty')
-                        ->value('totalXQty');
-                    $saleIds->GrandTotal = $grandTotal;
-                    $saleIds->save();
-
-
-                    return response()->json([
-                        'message' => 'Sale created successfully',
-                        'data' => $saleIds,
-                    ]);
+                // Memeriksa jika product_variant_id sama dengan nilai yang diinginkan
+                if ($saleDetail->product_variant_id == $product_variant_id) {
+                    // Jika ditemukan, atur variabel pengecekan menjadi true dan keluar dari loop
+                    $isProductVariantIdMatched = true;
+                    break;
                 }
+            }
+
+            // Melakukan pengecekan hasil
+            if ($isProductVariantIdMatched) {
+                return 2;
+
+                //  "Product variant ID ditemukan!";
+                $dataProduct =  Product::with('variants')->find($request->product_id);
+
+                $salesDetail = SaleDetail::find($saleDetail->id);
+                $salesDetail->quantity = $saleDetail->quantity + $request->qty;
+                $salesDetail->save();
+
+                $grandTotal = DB::table('sales')
+                    ->join('sale_details', 'sales.id', '=', 'sale_details.sale_id')
+                    ->where('sales.id', '=', $saleIds->id)
+                    ->selectRaw('SUM(sale_details.total * sale_details.quantity) as totalXQty')
+                    ->value('totalXQty');
+                $saleIds->GrandTotal = $grandTotal;
+                $saleIds->save();
+
+
+                return response()->json([
+                    'message' => 'Sale created successfully',
+                    'data' => $saleIds,
+                ]);
+            } else {
+                //  "Product variant ID tidak ditemukan!";
+
+                $dataProduct =  Product::with('variants')->find($request->product_id);
+
+                $salesDetail = new SaleDetail();
+                $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet) - $dataProduct->discount;
+                $salesDetail->sale_id = $saleIds->id;
+                $salesDetail->quantity = $request->qty;
+                $salesDetail->product_id = $dataProduct->id;
+                $salesDetail->product_variant_id = $product_variant_id;
+                $salesDetail->price = $dataProduct->price;
+                $salesDetail->imei_number = $dataProduct->imei_number;
+                $salesDetail->TaxNet = $dataProduct->TaxNet;
+                $salesDetail->discount = $dataProduct->discount;
+                $salesDetail->save();
+
+                $grandTotal = DB::table('sales')
+                    ->join('sale_details', 'sales.id', '=', 'sale_details.sale_id')
+                    ->where('sales.id', '=', $saleIds->id)
+                    ->selectRaw('SUM(sale_details.total * sale_details.quantity) as totalXQty')
+                    ->value('totalXQty');
+                $saleIds->GrandTotal = $grandTotal;
+                $saleIds->save();
+
+                return response()->json([
+                    'message' => 'Sale created successfully',
+                    'data' => $saleIds,
+                ]);
             }
         }
     }
