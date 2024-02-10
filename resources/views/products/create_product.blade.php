@@ -216,8 +216,8 @@
                         <div class="form-group col-md-4">
                             <label>{{ __('translate.Allow_PO') }} <span class="field_required">*</span></label>
                             <v-select placeholder="{{ __('translate.Choose_Method') }}" v-model="product.allow_po"
-                                      :reduce="(option) => option.value"
-                                      :options="[
+                                :reduce="(option) => option.value"
+                                :options="[
                                     { label: 'Ya', value: '1' },
                                     { label: 'Tidak', value: '0' }
                                 ]">
@@ -249,7 +249,7 @@
                                         <tr v-if="variants.length <=0">
                                             <td colspan="6">{{ __('translate.No_data_Available') }}</td>
                                         </tr>
-                                        <tr v-for="variant in variants">
+                                        <tr v-for="variant in variants" key="variant.id">
                                             <td>
                                                 <v-select @input="Selected_Variant" placeholder="Choose Variation"
                                                     v-model="variant.variantId"
@@ -418,7 +418,7 @@
 
 
 
-        methods: {
+        methods: {            
             //------ Generate code
             generateNumber() {
                 this.code_exist = "";
@@ -498,7 +498,7 @@
                     reader.onload = (e) => {
                         this.preview = e.target.result;
                     }
-                    this.image=input.files[0];
+                    this.image = input.files[0];
                     reader.readAsDataURL(input.files[0]);
                 }
             },
@@ -605,7 +605,18 @@
 
         },
         //-----------------------------Autoload function-------------------
-        created() {}
+        created() {
+<<<<<<< HEAD
+            console.log(this.variants)
+=======
+            // this.variants = "test"›
+        },
+        watch: {
+            'variants': function(val) {
+                console.log(val)
+            }
+>>>>>>> 99b7dbf (up to date)
+        }
 
     })
 </script>

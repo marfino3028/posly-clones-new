@@ -12,6 +12,7 @@ import PaymentVue from "./components/Payment.vue";
 import FooterPaymentNavVue from "./components/FooterPaymentNav.vue";
 import OrderDetailVue from "./components/OrderDetail.vue";
 import PaymentSuccessVue from "./components/PaymentSuccess.vue";
+import SidebarVue from "./components/Sidebar.vue";
 
 console.log("test");
 
@@ -39,6 +40,7 @@ app.component("payment-vue", PaymentVue);
 app.component("footer-payment-nav-vue", FooterPaymentNavVue);
 app.component("order-detail-vue", OrderDetailVue);
 app.component("payment-success-vue", PaymentSuccessVue);
+app.component("sidebar-vue", SidebarVue);
 
 app.use(router).mount("#app");
 

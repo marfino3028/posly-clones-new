@@ -1,11 +1,11 @@
 <template>
     <div class="bottom-panel-box">
-        <div class="left-panel">
+        <!-- <div class="left-panel">
             <a href="#">
                 <i class="ri-heart-line"></i>
                 <span>Add to Wishlist</span>
             </a>
-        </div>
+        </div> -->
 
         <div class="right-panel">
             <a href="#" @click.prevent="addToCart">
@@ -24,7 +24,7 @@ const addToCart = () => {
 
     console.log(cartStorage)
 
-    
+
 
     window.location.href = "/cart"
 }

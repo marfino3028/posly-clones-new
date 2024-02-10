@@ -27,7 +27,8 @@ class HomeCtr extends Controller
 
     public function detail($id)
     {
-        $product_details =Product::with('category')->where('id', $id)->first();
+        // dari variants relasi ke variant option lalu variant options relasi ke variant attributes ke variant attributes values 
+        $product_details =Product::with('category', 'variants','variants.variant_option.variant_atrributes.variant_attributes_values','variants.variant_option','variants.variant_option.variant_atrributes')->where('id', $id)->first();
         $promoPrice = $product_details['promo_price'] ?? null;
 
         // Memeriksa kondisi dan menetapkan nilai promo_price menjadi NULL jika kondisi tidak terpenuhi
@@ -45,7 +46,7 @@ class HomeCtr extends Controller
             
             "promoPrice" => $promoPrice,
             "product_details" => $product_details,
-            "variants" => $variants,
+            // "variants" => $variants,
         ], 200);
     }
 

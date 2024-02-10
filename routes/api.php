@@ -6,9 +6,11 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\HomeCtr;
+use App\Http\Controllers\Backend\PaymentCtr;
 use App\Http\Controllers\Backend\PurchaseCartCtr;
 use App\Http\Controllers\Backend\PurchaseCtr;
 use App\Http\Controllers\Backend\SalesCtr;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,15 +34,24 @@ Route::get('payment-method', 'AuthController@paymentMethod')->name('paymentmetho
 Route::get('payment-method/{id}', 'AuthController@paymentMethod');
 Route::post('alamat-all', 'AuthController@alamatAllIn')->name('alamatall');
 Route::post('alamat-all/{id}', 'AuthController@alamatAllIn');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-
-
 Route::get('/products', [HomeCtr::class, 'index']);
 Route::get('/product/{id}', [HomeCtr::class, 'detail']);
-Route::post('/sales', [SalesCtr::class, 'create']);
+
+Route::middleware(['auth:api'])->group(function () {
+  Route::post('/sales', [SalesCtr::class, 'create']);
+  Route::get('/sales-detail', [SalesCtr::class, 'salesDetail']);
+
+  Route::get('/payment', [PaymentCtr::class, 'index']);
+  Route::post('/payment-upload', [PaymentCtr::class, 'upload']);
+});
+
+Route::get('/products', [HomeCtr::class, 'index']);
+  Route::get('/product/{id}', [HomeCtr::class, 'detail']);
 
 
 

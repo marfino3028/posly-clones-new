@@ -1,6 +1,6 @@
 <template>
     <!-- Form Login Boostrap -->
-    <div class="container">
+    <!-- <div class="container">
         <section class="login">
             <form>
                 <div class="form-group">
@@ -17,12 +17,33 @@
                     <span class="text-danger" v-if="errors.password" v-text="errors.password[0]"></span>
                 </div>
                 <button type="button" class="btn btn-primary mt-5" @click.prevent="login">Submit</button>
-                <!-- Register -->
+
                 <div class="text-center mt-2">
                     <a href="/eccomerce/register" class="text-center mt-10">Register</a>
                 </div>
             </form>
         </section>
+    </div> -->
+    <div class="ecommerce-auth d-block">
+        <div class="custom-container w-100">
+            <h1 class="top-title">Welcome</h1>
+            <h2 style="color: black;">Login to Posly</h2>
+            <form class="form-style-1" @submit.prevent="submit">
+                <div>
+                    <label for="mail" class="form-label">Email address</label>
+                    <input v-model="email" type="email" class="form-control" id="mail" placeholder="Enter your email here">
+                </div>
+                <div class="mt-3">
+                    <label for="pass" class="form-label">Password</label>
+                    <input v-model="password" type="password" class="form-control" placeholder="Enter your password"
+                        id="pass">
+                </div>
+                <!-- <a href="forgot.html" class="theme-color text-end d-block mt-1">Forgot password?</a> -->
+                <button type="submit" class="btn btn-secondary mt-3">Login</button>
+
+            </form>
+
+        </div>
     </div>
 </template>
 <script setup>
@@ -34,10 +55,10 @@ const email = ref('marfinohamzah455@gmail.com')
 const password = ref('hamzah3028')
 
 const errors = ref([])
-const login = () => {
+const submit = () => {
     axios.post(`${baseUrl}/login`, {
         email: email.value,
-        password: password.value
+        password: password.value,
     }).then(response => {
         console.log(response.data)
         localStorage.setItem('token', response.data.token)
@@ -45,9 +66,8 @@ const login = () => {
     }).catch(error => {
         errors.value = error.response.data.errors
     })
-
-    // window.location.href = '/?test=1'
 }
+
 
 </script>
 <style scoped>
