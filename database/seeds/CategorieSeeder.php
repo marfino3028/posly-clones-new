@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+namespace Database\Seeders;
 
-class categoriesSeeder extends Seeder
+use Illuminate\Database\Seeder;
+use DB;
+
+class CategorieSeeder extends Seeder
 {
     /**
      * Run the database seeds.

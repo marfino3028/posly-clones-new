@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\CategorieSeeder;
 use Database\Seeders\ProductsSeeder;
 use Database\Seeders\ProductVariantsSeeder;
 use Database\Seeders\ProductWarehousesSeeder;
@@ -37,7 +38,7 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
-            categoriesSeeder::class,
+            CategorieSeeder::class,
             ProductsSeeder::class,
             ProductVariantsSeeder::class,
             ProductWarehousesSeeder::class,
