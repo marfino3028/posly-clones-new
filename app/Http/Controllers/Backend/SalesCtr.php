@@ -129,8 +129,19 @@ class SalesCtr extends Controller
 
     public function salesDetail()
     {
-
         $data = Sale::with('details')->where('user_id', Auth::user()->id)->get();
+
+        // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
+        foreach ($data as $sale) {
+            foreach ($sale->details as $detail) {
+                $productVariantIds = json_decode($detail->product_variant_id);
+
+                $variants = ProductVariant::whereIn('id', $productVariantIds)->get();
+
+                // Menambahkan data varian ke dalam detail
+                $detail->variants = $variants;
+            }
+        }
         return response()->json([
             'message' => 'Get data successfully',
             'data' => $data,
