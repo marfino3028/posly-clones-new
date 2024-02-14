@@ -52,7 +52,7 @@ class HomeCtr extends Controller
 
             "promoPrice" => $promoPrice,
             "product_details" => $product_details,
-            // "variants" => $variants,
+            "variants" => $variants,
         ], 200);
     }
 }
