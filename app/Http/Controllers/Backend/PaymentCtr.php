@@ -4,24 +4,24 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentMethod;
+use App\Models\ProductVariant;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Twilio\TwiML\Voice\Say;
 
 class PaymentCtr extends Controller
 {
     public function index()
     {
-        $dataPayment=PaymentMethod::get(); 
-        $dataSale=Sale::where('user_id', Auth::user()->id)->first();
+        $dataPayment = PaymentMethod::get();
+        $dataSale = Sale::where('user_id', Auth::user()->id)->first();
 
         return response()->json([
             'message' => 'Get data successfully',
             'dataPayment' => $dataPayment,
             'dataSale' => $dataSale,
         ]);
-
     }
 
     public function upload(Request $request)
@@ -39,15 +39,56 @@ class PaymentCtr extends Controller
         // Upload file to public/transfer_evidence
         $filePath =  $file->move(public_path('transfer_evidence'), $fileName);
 
-        $data =Sale::where('id', $request->sale_id) // Gantilah 'id' dengan primary key yang sesuai
-        ->update([
-            'transfer_evidence' => $filePath,
-            'payment_statut' => "sudah_upload",
-            'statut' => "sudah_upload",
-        ]);
+        $data = Sale::where('id', $request->sale_id) // Gantilah 'id' dengan primary key yang sesuai
+            ->update([
+                'transfer_evidence' => $filePath,
+                'payment_statut' => "sudah_upload",
+                'statut' => "sudah_upload",
+            ]);
 
         return response()->json([
             'message' => 'Upload transfer evidence successfully',
+            'data' => $data,
+        ]);
+    }
+
+    public function payNow(Request $request)
+    {
+        $userName = auth()->user()->nama;
+        $prefix = substr($userName, 0, 3);
+        $randomNumber = mt_rand(1000, 9999); // Anda dapat menyesuaikan rentang sesuai kebutuhan
+        $uniqueNumber = $prefix . $randomNumber;
+
+        Sale::where('id', $request->sale_id) // Gantilah 'id' dengan primary key yang sesuai
+            ->update([
+                'payment_method_id' => $request->payment_method_id,
+                'alamat_id' => $request->alamat_id,
+                'ref' => $uniqueNumber
+            ]);
+        $data = Sale::find($request->sale_id);
+        return response()->json([
+            'message' => 'pay now success',
+            'data' => $data,
+        ]);
+    }
+
+    public function orderSummary()
+    {
+        $data = Sale::with('payment_method','alamat', 'details', 'details.product')->where('user_id', Auth::user()->id)->get();
+
+        // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
+        foreach ($data as $sale) {
+            foreach ($sale->details as $detail) {
+                $productVariantIds = json_decode($detail->product_variant_id);
+
+                $variants = ProductVariant::whereIn('id', $productVariantIds)->get();
+
+                // Menambahkan data varian ke dalam detail
+                $detail->variants = $variants;
+            }
+        }
+        return response()->json([
+            'message' => 'Get data successfully',
             'data' => $data,
         ]);
     }
