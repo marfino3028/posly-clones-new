@@ -17,6 +17,8 @@ class CreateSalesTable extends Migration {
 		{
 			$table->integer('id', true);
 			$table->integer('user_id')->index('user_id_sales');
+			$table->integer('payment_method_id')->index('payment_method_id_sales')->nullable()->default(null);
+			$table->integer('alamat_id')->index('alamat_id_sales')->nullable()->default(null);
 			$table->dateTime('date');
 			$table->string('Ref', 192);
 			$table->boolean('is_pos')->nullable()->default(0);

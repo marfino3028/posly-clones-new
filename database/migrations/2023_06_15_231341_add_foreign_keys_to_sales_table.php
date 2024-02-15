@@ -17,6 +17,9 @@ class AddForeignKeysToSalesTable extends Migration {
 		{
 			// $table->foreign('client_id', 'sale_client_id')->references('id')->on('clients')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 			$table->foreign('user_id', 'user_id_sales')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+			$table->foreign('payment_method_id', 'payment_method_id_sales')->references('id')->on('payment_methods')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+			$table->foreign('alamat_id', 'alamat_id_sales')->references('id')->on('payment_methods')->onUpdate('RESTRICT')->onDelete('RESTRICT');
+			
 			// $table->foreign('warehouse_id', 'warehouse_id_sale')->references('id')->on('warehouses')->onUpdate('RESTRICT')->onDelete('RESTRICT');
 		});
 	}
