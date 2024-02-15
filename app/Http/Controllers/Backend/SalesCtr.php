@@ -18,7 +18,7 @@ class SalesCtr extends Controller
     {
 
         $product_variant_id = json_encode($request->product_variant_id);
-        
+
         // totalAdditionalPrice
         $totalAdditionalPrice = DB::table('product_variants')
             ->whereIn('id', $request->product_variant_id)
@@ -135,7 +135,11 @@ class SalesCtr extends Controller
 
     public function salesDetail()
     {
-        $data = Sale::with('details', 'details.product')->where('user_id', Auth::user()->id)->get();
+
+        $data = Sale::with('details', 'details.product')
+            ->where('user_id', Auth::user()->id)
+            ->withSum('details as total_price_items', 'total_price_item')
+            ->get();
 
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
