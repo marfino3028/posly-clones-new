@@ -18,6 +18,11 @@ class SalesCtr extends Controller
     {
 
         $product_variant_id = json_encode($request->product_variant_id);
+        
+        // totalAdditionalPrice
+        $totalAdditionalPrice = DB::table('product_variants')
+            ->whereIn('id', $request->product_variant_id)
+            ->sum('additional_price');
 
         // get sale by user id
         $saleIds = Sale::where('user_id', Auth::user()->id)->first();
@@ -31,13 +36,14 @@ class SalesCtr extends Controller
             $dataProduct =  Product::with('variants')->find($request->product_id);
 
             $salesDetail = new SaleDetail();
-            $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet) - $dataProduct->discount;
+            $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet + $totalAdditionalPrice) - $dataProduct->discount;
+            $salesDetail->total_price_item = ($dataProduct->price + $totalAdditionalPrice);
             $salesDetail->sale_id = $sales->id;
             $salesDetail->quantity = $request->qty;
             $salesDetail->product_id = $dataProduct->id;
             $salesDetail->product_variant_id = $product_variant_id;
             $salesDetail->price = $dataProduct->price;
-            $salesDetail->imei_number = $dataProduct->imei_number;
+            $salesDetail->imei_number = $dataProduct->imei_number ?? null;
             $salesDetail->TaxNet = $dataProduct->TaxNet;
             $salesDetail->discount = $dataProduct->discount;
             $salesDetail->save();
@@ -72,7 +78,6 @@ class SalesCtr extends Controller
 
             // Melakukan pengecekan hasil
             if ($isProductVariantIdMatched) {
-                // return 2;
 
                 //  "Product variant ID ditemukan!";
                 $dataProduct =  Product::with('variants')->find($request->product_id);
@@ -101,12 +106,13 @@ class SalesCtr extends Controller
 
                 $salesDetail = new SaleDetail();
                 $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet) - $dataProduct->discount;
+                $salesDetail->total_price_item = ($dataProduct->price + $totalAdditionalPrice);
                 $salesDetail->sale_id = $saleIds->id;
                 $salesDetail->quantity = $request->qty;
                 $salesDetail->product_id = $dataProduct->id;
                 $salesDetail->product_variant_id = $product_variant_id;
                 $salesDetail->price = $dataProduct->price;
-                $salesDetail->imei_number = $dataProduct->imei_number;
+                $salesDetail->imei_number = $dataProduct->imei_number ?? null;
                 $salesDetail->TaxNet = $dataProduct->TaxNet;
                 $salesDetail->discount = $dataProduct->discount;
                 $salesDetail->save();
