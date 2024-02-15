@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PaymentMethod;
 use App\Models\ProductVariant;
 use App\Models\Sale;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Twilio\TwiML\Voice\Say;
@@ -16,11 +17,13 @@ class PaymentCtr extends Controller
     {
         $dataPayment = PaymentMethod::get();
         $dataSale = Sale::where('user_id', Auth::user()->id)->first();
+        $dataAddres=UserAddress::get();
 
         return response()->json([
             'message' => 'Get data successfully',
             'dataPayment' => $dataPayment,
             'dataSale' => $dataSale,
+            'dataAddres' => $dataAddres,
         ]);
     }
 
