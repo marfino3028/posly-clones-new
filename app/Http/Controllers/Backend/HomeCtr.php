@@ -19,6 +19,11 @@ class HomeCtr extends Controller
 
         $products = Product::select('id', 'name', 'price', 'image', 'category_id')->with('category')->get();
 
+        $products->transform(function ($product) {
+            $product->image = $product->image ? asset("images/products/{$product->image}") : null;
+            return $product;
+        });
+
         return response()->json([
             "products" => $products,
             "categoryProducts" => $categoryProducts,
@@ -30,6 +35,8 @@ class HomeCtr extends Controller
     {
 
         $product_details = Product::find($id);
+        $product_details->image = $product_details->image ? asset("images/products/{$product_details->image}") : null;
+
         $promoPrice = $product_details->promo_price ?? null;
 
         // Memeriksa kondisi dan menetapkan nilai promo_price menjadi NULL jika kondisi tidak terpenuhi
@@ -50,9 +57,9 @@ class HomeCtr extends Controller
 
         return response()->json([
 
-            "promoPrice" => $promoPrice,
+            // "promoPrice" => $promoPrice,
             "product_details" => $product_details,
-            "variants" => $variants,
+            // "variants" => $variants,
         ], 200);
     }
 }
