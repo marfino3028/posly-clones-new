@@ -28,13 +28,8 @@ class HomeCtr extends Controller
 
     public function detail($id)
     {
-        $product_details = DB::table('products')
-            ->join('product_variants', 'product_variants.product_id', '=', 'products.id')
-            ->join('variant_attributes', 'variant_attributes.id', '=', 'product_variants.variant_attribute_id')
-            ->join('variant_attribute_values', 'variant_attribute_values.id', '=', 'product_variants.variant_attribute_value_id')
-            ->where('products.id', $id)
-            ->first();
 
+        $product_details = Product::find($id);
         $promoPrice = $product_details->promo_price ?? null;
 
         // Memeriksa kondisi dan menetapkan nilai promo_price menjadi NULL jika kondisi tidak terpenuhi
@@ -46,7 +41,12 @@ class HomeCtr extends Controller
             $promoPrice = null;
         }
 
-        $variants = VariantAttribute::with('attributeValue')->get();
+        $variants = DB::table('product_variants')
+            ->join('variant_attribute_values', 'variant_attribute_values.id', '=', 'product_variants.variant_attribute_value_id')
+            ->join('variant_attributes', 'variant_attributes.id', '=', 'product_variants.variant_attribute_id')
+            ->where('product_id', $id)
+            ->get();
+
 
         return response()->json([
 
