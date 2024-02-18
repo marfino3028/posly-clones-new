@@ -10,7 +10,9 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use DB;
+use File;
 
 class SalesCtr extends Controller
 {
@@ -140,6 +142,17 @@ class SalesCtr extends Controller
             ->where('user_id', Auth::user()->id)
             ->withSum('details as total_price_items', 'total_price_item')
             ->get();
+
+        $data->transform(function ($sale) {
+            $sale->details->transform(function ($detail) {
+                // Pastikan bahwa image sudah memiliki prefix yang benar sebelum menambahkan prefix tambahan
+                if (!Str::startsWith($detail->product->image, 'http')) {
+                    $detail->product->image = asset("images/products/{$detail->product->image}");
+                }
+                return $detail;
+            });
+            return $sale;
+        });
 
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
