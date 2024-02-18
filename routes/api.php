@@ -48,10 +48,12 @@ Route::middleware(['auth:api'])->group(function () {
 
   Route::get('/payment', [PaymentCtr::class, 'index']);
   Route::post('/payment-upload', [PaymentCtr::class, 'upload']);
+  Route::post('/payment-now', [PaymentCtr::class, 'payNow']);
+  Route::get('/order-summary', [PaymentCtr::class, 'orderSummary']);
 });
 
 Route::get('/products', [HomeCtr::class, 'index']);
-  Route::get('/product/{id}', [HomeCtr::class, 'detail']);
+Route::get('/product/{id}', [HomeCtr::class, 'detail']);
 
 
 

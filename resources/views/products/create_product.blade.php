@@ -249,7 +249,7 @@
                                         <tr v-if="variants.length <=0">
                                             <td colspan="6">{{ __('translate.No_data_Available') }}</td>
                                         </tr>
-                                        <tr v-for="variant in variants" key="variant.id">
+                                        <tr v-for="variant in variants">
                                             <td>
                                                 <v-select @input="Selected_Variant" placeholder="Choose Variation"
                                                     v-model="variant.variantId"
@@ -418,7 +418,7 @@
 
 
 
-        methods: {            
+        methods: {
             //------ Generate code
             generateNumber() {
                 this.code_exist = "";
@@ -606,16 +606,12 @@
         },
         //-----------------------------Autoload function-------------------
         created() {
-<<<<<<< HEAD
-            console.log(this.variants)
-=======
             // this.variants = "test"›
         },
         watch: {
             'variants': function(val) {
                 console.log(val)
             }
->>>>>>> 99b7dbf (up to date)
         }
 
     })

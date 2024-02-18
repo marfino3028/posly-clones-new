@@ -31,7 +31,8 @@ class ProductsSeeder extends Seeder
                     'is_variant' => 1,
                     'is_imei' => 0,
                     'not_selling' => 0,
-                    'allowPO' => 1
+                    'allowPO' => 1,
+                    'image' => '1703930339.jpg'
                 ],
                 [
                     'id' => 2,
@@ -47,7 +48,8 @@ class ProductsSeeder extends Seeder
                     'is_variant' => 1,
                     'is_imei' => 0,
                     'not_selling' => 0,
-                    'allowPO' => 1
+                    'allowPO' => 1,
+                    'image' => '1703930339.jpg'
                 ],
                 [
                     'id' => 3,
@@ -63,7 +65,8 @@ class ProductsSeeder extends Seeder
                     'is_variant' => 1,
                     'is_imei' => 0,
                     'not_selling' => 0,
-                    'allowPO' => 1
+                    'allowPO' => 1,
+                    'image' => '1703930339.jpg'
                 ]
             ),
         );    

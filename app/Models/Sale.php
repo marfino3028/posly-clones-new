@@ -11,7 +11,7 @@ class Sale extends Model
     protected $fillable = [
         'date', 'Ref', 'is_pos', 
          'GrandTotal', 'qte_retturn', 'TaxNet', 'tax_rate', 'notes',
-        'total_retturn', 
+        'total_retturn', 'payment_method_id','alamat_id',
         // 'warehouse_id',
         // 'client_id',
          'user_id', 'statut', 'discount', 'shipping',
@@ -58,6 +58,16 @@ class Sale extends Model
     public function warehouse()
     {
         return $this->belongsTo('App\Models\Warehouse');
+    }
+
+    public function alamat()
+    {
+        return $this->belongsTo('App\Models\UserAddress');
+    }
+
+    public function payment_method()
+    {
+        return $this->belongsTo('App\Models\PaymentMethod');
     }
 
 }

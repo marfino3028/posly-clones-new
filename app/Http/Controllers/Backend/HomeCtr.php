@@ -19,6 +19,11 @@ class HomeCtr extends Controller
 
         $products = Product::select('id', 'name', 'price', 'image', 'category_id')->with('category')->get();
 
+        $products->transform(function ($product) {
+            $product->image = $product->image ? asset("images/products/{$product->image}") : null;
+            return $product;
+        });
+
         return response()->json([
             "products" => $products,
             "categoryProducts" => $categoryProducts,
@@ -28,12 +33,9 @@ class HomeCtr extends Controller
 
     public function detail($id)
     {
-        $product_details = DB::table('products')
-            ->join('product_variants', 'product_variants.product_id', '=', 'products.id')
-            ->join('variant_attributes', 'variant_attributes.id', '=', 'product_variants.variant_attribute_id')
-            ->join('variant_attribute_values', 'variant_attribute_values.id', '=', 'product_variants.variant_attribute_value_id')
-            ->where('products.id', $id)
-            ->first();
+
+        $product_details = Product::find($id);
+        $product_details->image = $product_details->image ? asset("images/products/{$product_details->image}") : null;
 
         $promoPrice = $product_details->promo_price ?? null;
 
@@ -46,7 +48,12 @@ class HomeCtr extends Controller
             $promoPrice = null;
         }
 
-        $variants = VariantAttribute::with('attributeValue')->get();
+        $variants = DB::table('product_variants')
+            ->join('variant_attribute_values', 'variant_attribute_values.id', '=', 'product_variants.variant_attribute_value_id')
+            ->join('variant_attributes', 'variant_attributes.id', '=', 'product_variants.variant_attribute_id')
+            ->where('product_id', $id)
+            ->get();
+
 
         return response()->json([
 

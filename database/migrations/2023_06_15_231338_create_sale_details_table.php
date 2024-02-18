@@ -28,6 +28,7 @@ class CreateSaleDetailsTable extends Migration {
 			$table->float('discount', 10, 0)->nullable();
 			$table->string('discount_method', 192)->nullable()->default('1');
 			$table->float('total', 10, 0);
+			$table->float('total_price_item', 10, 0);
 			$table->float('quantity', 10, 0);
 			$table->timestamps(6);
 		});

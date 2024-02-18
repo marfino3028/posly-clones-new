@@ -10,7 +10,9 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use DB;
+use File;
 
 class SalesCtr extends Controller
 {
@@ -18,6 +20,11 @@ class SalesCtr extends Controller
     {
 
         $product_variant_id = json_encode($request->product_variant_id);
+
+        // totalAdditionalPrice
+        $totalAdditionalPrice = DB::table('product_variants')
+            ->whereIn('id', $request->product_variant_id)
+            ->sum('additional_price');
 
         // get sale by user id
         $saleIds = Sale::where('user_id', Auth::user()->id)->first();
@@ -31,13 +38,14 @@ class SalesCtr extends Controller
             $dataProduct =  Product::with('variants')->find($request->product_id);
 
             $salesDetail = new SaleDetail();
-            $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet) - $dataProduct->discount;
+            $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet + $totalAdditionalPrice) - $dataProduct->discount;
+            $salesDetail->total_price_item = ($dataProduct->price + $totalAdditionalPrice);
             $salesDetail->sale_id = $sales->id;
             $salesDetail->quantity = $request->qty;
             $salesDetail->product_id = $dataProduct->id;
             $salesDetail->product_variant_id = $product_variant_id;
             $salesDetail->price = $dataProduct->price;
-            $salesDetail->imei_number = $dataProduct->imei_number;
+            $salesDetail->imei_number = $dataProduct->imei_number ?? null;
             $salesDetail->TaxNet = $dataProduct->TaxNet;
             $salesDetail->discount = $dataProduct->discount;
             $salesDetail->save();
@@ -72,7 +80,6 @@ class SalesCtr extends Controller
 
             // Melakukan pengecekan hasil
             if ($isProductVariantIdMatched) {
-                return 2;
 
                 //  "Product variant ID ditemukan!";
                 $dataProduct =  Product::with('variants')->find($request->product_id);
@@ -101,12 +108,13 @@ class SalesCtr extends Controller
 
                 $salesDetail = new SaleDetail();
                 $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet) - $dataProduct->discount;
+                $salesDetail->total_price_item = ($dataProduct->price + $totalAdditionalPrice);
                 $salesDetail->sale_id = $saleIds->id;
                 $salesDetail->quantity = $request->qty;
                 $salesDetail->product_id = $dataProduct->id;
                 $salesDetail->product_variant_id = $product_variant_id;
                 $salesDetail->price = $dataProduct->price;
-                $salesDetail->imei_number = $dataProduct->imei_number;
+                $salesDetail->imei_number = $dataProduct->imei_number ?? null;
                 $salesDetail->TaxNet = $dataProduct->TaxNet;
                 $salesDetail->discount = $dataProduct->discount;
                 $salesDetail->save();
@@ -129,14 +137,29 @@ class SalesCtr extends Controller
 
     public function salesDetail()
     {
-        $data = Sale::with('details')->where('user_id', Auth::user()->id)->get();
+
+        $data = Sale::with('details', 'details.product')
+            ->where('user_id', Auth::user()->id)
+            ->withSum('details as total_price_items', 'total_price_item')
+            ->get();
+
+        $data->transform(function ($sale) {
+            $sale->details->transform(function ($detail) {
+                // Pastikan bahwa image sudah memiliki prefix yang benar sebelum menambahkan prefix tambahan
+                if (!Str::startsWith($detail->product->image, 'http')) {
+                    $detail->product->image = asset("images/products/{$detail->product->image}");
+                }
+                return $detail;
+            });
+            return $sale;
+        });
 
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
             foreach ($sale->details as $detail) {
                 $productVariantIds = json_decode($detail->product_variant_id);
 
-                $variants = ProductVariant::whereIn('id', $productVariantIds)->get();
+                $variants = ProductVariant::whereIn('id', $productVariantIds)->where('product_id', '=', $detail->product_id)->get();
 
                 // Menambahkan data varian ke dalam detail
                 $detail->variants = $variants;
