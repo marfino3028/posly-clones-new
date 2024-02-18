@@ -19,7 +19,7 @@ class CreateSaleDetailsTable extends Migration {
 			$table->dateTime('date');
 			$table->integer('sale_id')->index('Details_Sale_id');
 			$table->integer('product_id')->index('sale_product_id');
-			$table->text('product_variant_id')->nullable()->index('sale_product_variant_id');
+			$table->string('product_variant_id')->nullable();
 			$table->text('imei_number')->nullable();
 			$table->float('price', 10, 0);
 			$table->integer('sale_unit_id')->nullable()->index('sales_sale_unit_id');
