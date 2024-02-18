@@ -1,16 +1,15 @@
 <?php
 
-use Database\Seeders\CategorieSeeder;
 use Database\Seeders\ProductsSeeder;
 use Database\Seeders\ProductVariantsSeeder;
 use Database\Seeders\ProductWarehousesSeeder;
-use Database\Seeders\SaleDetailSeeder;
-use Database\Seeders\SaleSeeder;
 use Illuminate\Database\Seeder;
 use Laravolt\Indonesia\Seeds\CitiesSeeder;
 use Laravolt\Indonesia\Seeds\VillagesSeeder;
 use Laravolt\Indonesia\Seeds\DistrictsSeeder;
 use Laravolt\Indonesia\Seeds\ProvincesSeeder;
+use Database\Seeders\SaleDetailSeeder;
+use Database\Seeders\SaleSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,12 +39,12 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
-            CategorieSeeder::class,
+            categoriesSeeder::class,
             ProductsSeeder::class,
             ProductVariantsSeeder::class,
             ProductWarehousesSeeder::class,
-            SaleDetailSeeder::class,
             SaleSeeder::class,
+            SaleDetailSeeder::class,
         ]);
 
     }

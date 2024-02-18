@@ -39,7 +39,6 @@ class SaleSeeder extends Seeder
                     'created_at' => now(),
                     'updated_at' => now(),
                     'deleted_at' => null,
-                    'due_date' => null
                 ],
               
             ),

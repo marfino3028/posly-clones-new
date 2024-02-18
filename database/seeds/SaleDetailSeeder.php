@@ -36,7 +36,7 @@ class SaleDetailSeeder extends Seeder
                     'updated_at' => now()
                 ],
                 [
-                    'id' =>  1,
+                    'id' =>  2,
                     'date' => now(),
                     'sale_id' => 1,
                     'product_id' => 1,
@@ -54,7 +54,7 @@ class SaleDetailSeeder extends Seeder
                     'updated_at' => now()
                 ],
                 [
-                    'id' =>  1,
+                    'id' =>  3,
                     'date' => now(),
                     'sale_id' => 1,
                     'product_id' => 1,
@@ -72,7 +72,7 @@ class SaleDetailSeeder extends Seeder
                     'updated_at' => now()
                 ],
                 [
-                    'id' =>  1,
+                    'id' =>  4,
                     'date' => now(),
                     'sale_id' => 1,
                     'product_id' => 2,
@@ -90,7 +90,7 @@ class SaleDetailSeeder extends Seeder
                     'updated_at' => now()
                 ],
                 [
-                    'id' =>  1,
+                    'id' =>  5,
                     'date' => now(),
                     'sale_id' => 1,
                     'product_id' => 2,
@@ -108,7 +108,7 @@ class SaleDetailSeeder extends Seeder
                     'updated_at' => now()
                 ],
                 [
-                    'id' =>  1,
+                    'id' =>  6,
                     'date' => now(),
                     'sale_id' => 1,
                     'product_id' => 2,
