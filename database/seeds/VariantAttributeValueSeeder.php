@@ -67,7 +67,7 @@ class VariantAttributeValueSeeder extends Seeder
                     'id' => 9,
                     'variant_attribute_id' => 2,
                     'variant_attribute_value_code' => 'BL',
-                    'variant_attribute_value_name' => 'Blue',
+                    'variant_attribute_value_name' => 'Biru',
                 ],
                 [
                     'id' => 10,
