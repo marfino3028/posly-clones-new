@@ -57,9 +57,9 @@ class HomeCtr extends Controller
 
         return response()->json([
 
-            // "promoPrice" => $promoPrice,
+            "promoPrice" => $promoPrice,
             "product_details" => $product_details,
-            // "variants" => $variants,
+            "variants" => $variants,
         ], 200);
     }
 }
