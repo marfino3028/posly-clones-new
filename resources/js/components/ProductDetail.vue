@@ -7,8 +7,7 @@
                     <div id="gallery" class="swiper-wrapper">
                         <div class="swiper-slide shadow-sm border">
                             <div class="hes-gallery" data-pswp-width="1669" data-pswp-height="2500">
-                                <img src="https://images.tokopedia.net/img/cache/250-square/VqbcmM/2021/12/28/0a6d2e1a-4877-4c23-9264-2089595983a0.jpg"
-                                    class="img-fluid w-100" alt="" />
+                                <img :src="productDetail?.product_details?.image" class="img-fluid w-100" alt="" />
                             </div>
                         </div>
                         <div class="swiper-slide shadow-sm border">
@@ -61,27 +60,29 @@
                     </div>
                 </div>
                 <div class="product-size">
-                    <h4>Color:</h4>
-
+                    <h4>Warna:</h4>
                     <select v-model="form.color" class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option v-for="item in productDetail.colors" :key="item.id" :value="item.id">{{ item.name }}
+                        <option value="">Pilih Warna</option>
+                        <option v-for="item in colorOpt" :key="item.id" :value="item.id">{{
+                            item.variant_attribute_value_name }}
                         </option>
                     </select>
                 </div>
                 <div class="product-size">
-                    <h4>Size:</h4>
+                    <h4>Ukuran:</h4>
                     <select v-model="form.size" class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option v-for="item in productDetail.variants" :key="item.id" :value="item.id">{{ item.name }}
+                        <option value="">Pilih Ukuran</option>
+                        <option v-for="item in sizeOpt" :key="item.id" :value="item.id">{{ item.variant_attribute_value_name
+                        }}
                         </option>
                     </select>
                 </div>
                 <div class="product-size">
                     <h4>Variasi:</h4>
-                    <select v-model="form.size" class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option v-for="item in productDetail.variants" :key="item.id" :value="item.id">{{ item.name }}
+                    <select v-model="form.variant" class="form-select" aria-label="Default select example">
+                        <option value="">Pilih Variasi</option>
+                        <option v-for="item in variantOpt" :key="item.id" :value="item.id">{{
+                            item.variant_attribute_value_name }}
                         </option>
                     </select>
                 </div>
@@ -106,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-item">
+                    <!-- <div class="accordion-item">
                         <h2 class="accordion-header" id="specifications1">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#specifications">Specifications
@@ -273,7 +274,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
@@ -347,7 +348,7 @@ import axios from "axios";
 //         ],
 //     ],
 
-import { reactive, ref, watchEffect, onMounted } from "vue";
+import { reactive, ref, watchEffect, onMounted, computed } from "vue";
 import { convertToThousands } from "../helper"
 
 
@@ -417,12 +418,14 @@ const productDetail = ref({
 const form = reactive({
     color: "",
     size: "",
+    variant: "",
+    productId: productDetail?.value?.product_details?.id,
 });
 
 // const colorList = ref([]);
 // const sizeList = ref([]);
 
-onMounted(() => {
+onMounted(async () => {
     // get query params in url
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -430,7 +433,7 @@ onMounted(() => {
 
     const id = urlParams.get("id");
 
-    getProductDetail(id);
+    await getProductDetail(id);
 });
 
 const getProductDetail = async (id) => {
@@ -440,15 +443,27 @@ const getProductDetail = async (id) => {
 
         productDetail.value = response.data;
         console.log('data', productDetail.value);
-        // colorList.value = response.data.colors
-        // sizeList.value = response.data.variants
-
     } catch (error) {
         console.log(error);
     }
 };
 
+const colorOpt = computed(() => {
+    return productDetail?.value?.variants?.filter((item) => item.variant_attribute_id === 2)
+});
+
+const sizeOpt = computed(() => {
+    return productDetail?.value?.variants?.filter((item) => item.variant_attribute_id === 1)
+});
+
+const variantOpt = computed(() => {
+    return productDetail?.value?.variants?.filter((item) => item.variant_attribute_id === 3)
+});
+
 watchEffect(() => {
+
+    form.productId = productDetail?.value?.product_details?.id;
+
     localStorage.setItem("cart", JSON.stringify(form));
 });
 

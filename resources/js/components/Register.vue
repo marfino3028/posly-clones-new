@@ -43,7 +43,7 @@
                 </div>
                 <div class="mt-3">
                     <label for="pass" class="form-label">Password</label>
-                    <input v-model="form.password" type="text" class="form-control">
+                    <input v-model="form.password" type="password" class="form-control">
                 </div>
                 <div class="mt-3">
                     <label for="pass" class="form-label">Konfirm Password</label>
@@ -56,19 +56,51 @@
 
                 <div class="mt-3">
                     <label for="pass" class="form-label">Provinsi</label>
-                    <input v-model="form.province" type="text" class="form-control">
+                    <!-- <input v-model="form.province" type="text" class="form-control">
+                     -->
+
+                    <select v-model="form.province" @change="getCity(form.province)" class="form-select"
+                        aria-label="Default select example">
+                        <option selected>Pilih Provinsi</option>
+                        <option v-for="province in provinceOpt" :key="province.id" :value="province.id">
+                            {{ province.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="mt-3">
                     <label for="pass" class="form-label">City</label>
-                    <input v-model="form.city" type="text" class="form-control">
+                    <!-- <input v-model="form.city" type="text" class="form-control"> -->
+
+                    <select v-model="form.city" @change="getDistrict(form.city)" class="form-select"
+                        aria-label="Default select example">
+                        <option selected>Pilih Kota</option>
+                        <option v-for="city in cityOpt" :key="city.id" :value="city.id">
+                            {{ city.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="mt-3">
                     <label for="pass" class="form-label">Kecamatan</label>
-                    <input v-model="form.district" type="text" class="form-control">
+                    <!-- <input v-model="form.district" type="text" class="form-control"> -->
+
+                    <select v-model="form.district" @change="getSubDistrict(form.district)" class="form-select"
+                        aria-label="Default select example">
+                        <option selected>Pilih Kecamatan</option>
+                        <option v-for="district in districtOpt" :key="district.id" :value="district.id">
+                            {{ district.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="mt-3">
                     <label for="pass" class="form-label">Kelurahan</label>
-                    <input v-model="form.villages" type="text" class="form-control">
+                    <!-- <input v-model="form.villages" type="text" class="form-control"> -->
+
+                    <select v-model="form.villages" class="form-select" aria-label="Default select example">
+                        <option selected>Pilih Kelurahan</option>
+                        <option v-for="subDistrict in subDistrictOpt" :key="subDistrict.id" :value="subDistrict.id">
+                            {{ subDistrict.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="mt-3">
                     <label for="pass" class="form-label">Kode Pos</label>
@@ -88,7 +120,8 @@
     </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
+import { showError } from '../helper';
 import axios from 'axios'
 import { baseUrl } from "../app.js";
 
@@ -108,32 +141,76 @@ const form = reactive({
     country: '',
 })
 
-const errors = ref([])
 const submit = () => {
 
     const formData = new FormData()
     formData.append('username', form.username)
-    formData.append('name', form.name)
+    formData.append('nama', form.name)
     formData.append('email', form.email)
     formData.append('password', form
         .password)
-    formData.append('confirmPassword', form.confirmPassword)
-    formData.append('noHp', form.noHp)
+    formData.append('password_confirmation', form.confirmPassword)
+    formData.append('no_hp', form.noHp)
     formData.append('alamat', form.alamat)
     formData.append('kodepos', form.kodepos)
     formData.append('villages', form.villages)
     formData.append('district', form.district)
+    formData.append('country', "indonesia")
     formData.append('city', form.city)
     formData.append('province', form.province)
     formData.append('country', form.country)
 
 
-    axios.post(`${baseUrl}/register`, formData).then(response => {
+    axios.post(`/api/register`, formData).then(response => {
         window.location.href = '/eccomerce/login'
     }).catch(error => {
-        errors.value = error.response.data.errors
+        console.log(error.response.data.error)
+        // looping message error
+        for (const key in error.response.data.error) {
+            showError(error.response.data.error[key][0])
+        }
     })
 }
+
+const provinceOpt = ref([])
+const getProvince = () => {
+    axios.get(`/api/province`).then(response => {
+        provinceOpt.value = response.data
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+const cityOpt = ref([])
+const getCity = (id) => {
+    axios.get(`/api/cities/${id}`).then(response => {
+        cityOpt.value = response.data.cities
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+const districtOpt = ref([])
+const getDistrict = (id) => {
+    axios.get(`/api/districts/${id}`).then(response => {
+        districtOpt.value = response.data.districts
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+const subDistrictOpt = ref([])
+const getSubDistrict = (id) => {
+    axios.get(`/api/subdistricts/${id}`).then(response => {
+        subDistrictOpt.value = response.data.villages
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+onMounted(async () => {
+    await getProvince()
+})
 
 
 </script>

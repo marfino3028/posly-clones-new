@@ -28,7 +28,7 @@
         <div class="custom-container w-100">
             <h1 class="top-title">Welcome</h1>
             <h2 style="color: black;">Login to Posly</h2>
-            <form class="form-style-1" @submit.prevent="submit">
+            <form class="form-style-1">
                 <div>
                     <label for="mail" class="form-label">Email address</label>
                     <input v-model="email" type="email" class="form-control" id="mail" placeholder="Enter your email here">
@@ -39,7 +39,11 @@
                         id="pass">
                 </div>
                 <!-- <a href="forgot.html" class="theme-color text-end d-block mt-1">Forgot password?</a> -->
-                <button type="submit" class="btn btn-secondary mt-3">Login</button>
+                <button @click="submit" type="button" class="btn btn-secondary mt-3">Login</button>
+
+                <div class="text-center mt-2">
+                    <a href="/ecommerce/register" class="text-center mt-10">Register</a>
+                </div>
 
             </form>
 
@@ -56,12 +60,13 @@ const password = ref('hamzah3028')
 
 const errors = ref([])
 const submit = () => {
-    axios.post(`${baseUrl}/login`, {
+    axios.post(`/api/login`, {
         email: email.value,
         password: password.value,
     }).then(response => {
         console.log(response.data)
-        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('token-ecommerce', response.data.token)
+        localStorage.setItem('user-id', response.data.user_id)
         window.location.href = '/'
     }).catch(error => {
         errors.value = error.response.data.errors

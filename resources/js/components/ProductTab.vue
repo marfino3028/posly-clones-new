@@ -28,9 +28,7 @@
                 <div v-for="item in products" :key="item.id" class="product-box">
                     <div class="product-image shadow-sm border">
                         <a :href="`/product?id=${item.id}`">
-                            <img style="width:600px"
-                                src="https://images.tokopedia.net/img/cache/250-square/VqbcmM/2021/12/28/0a6d2e1a-4877-4c23-9264-2089595983a0.jpg"
-                                class="img-fluid" alt="">
+                            <img style="width:600px" :src="item.image" class="img-fluid" alt="">
                         </a>
                         <div class="add-icon">
                             <input class="form-check-input wishlist-button" type="checkbox">

@@ -10,6 +10,7 @@ use Laravolt\Indonesia\Seeds\DistrictsSeeder;
 use Laravolt\Indonesia\Seeds\ProvincesSeeder;
 use Database\Seeders\SaleDetailSeeder;
 use Database\Seeders\SaleSeeder;
+use Database\Seeders\CategorieSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -39,13 +40,12 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             DistrictsSeeder::class,
             VillagesSeeder::class,
-            categoriesSeeder::class,
+            CategorieSeeder::class,
             ProductsSeeder::class,
             ProductVariantsSeeder::class,
             ProductWarehousesSeeder::class,
             SaleSeeder::class,
             SaleDetailSeeder::class,
         ]);
-
     }
 }

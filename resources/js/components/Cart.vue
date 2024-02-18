@@ -40,7 +40,8 @@
     <order-detail-vue></order-detail-vue>
 </template>
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import axios from 'axios'
 
 const products = ref([
     {
@@ -80,6 +81,21 @@ const products = ref([
 const removeProduct = (id) => {
     products.value = products.value.filter(product => product.id !== id)
 }
+
+const fetchCart = async () => {
+    const res = await axios.get('/api/sales-detail',
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token-ecommerce')}`
+            }
+        }
+    )
+    products.value = res.data
+}
+
+onMounted(async () => {
+    await fetchCart()
+})
 
 watch(() => products.value, (products) => {
     console.log(products)

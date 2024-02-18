@@ -11,18 +11,13 @@
                         <div class="accordion-body p-0">
                             <ul class="payment-list">
                                 <li v-for="payment in paymentMethodLists" :key="payment.id">
-                                    <input value="1" type="radio" name="1" class="form-check-input" id="01">
-                                    <label class="minha-table" for="01">
+                                    <input :value="payment.id" type="radio" :name="payment.id" class="form-check-input"
+                                        :id="payment.id">
+                                    <label class="minha-table" :for="payment.id">
                                         <!-- <img src="{{ asset('assets/asset_frontend/images/pay/m-card.png') }}" alt=""> -->
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                        <span>{{ payment.title }}</span>
-=======
-                                        <span>{{ payment.number }}</span>
->>>>>>> 99b7dbf (up to date)
-=======
-                                        <span>{{ payment.title }}</span>
->>>>>>> e4e5cab (up to date)
+                                        <span>{{ payment.title || "-" }}</span>
+                                        <span>{{ payment.nama_pemilik || "-" }}</span>
+                                        <span>{{ payment.no_rekening || "-" }}</span>
                                     </label>
                                 </li>
                             </ul>
@@ -56,8 +51,7 @@
     <order-detail-vue></order-detail-vue>
 </template>
 <script setup>
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import { onMounted, reactive, ref, watch } from 'vue'
 import { convertToThousands } from "../helper"
 import axios from 'axios'
@@ -65,19 +59,7 @@ import axios from 'axios'
 onMounted(() => {
     getPaymentMethod()
 })
-=======
-import { reactive, ref, watch } from 'vue'
-import { convertToThousands } from "../helper"
->>>>>>> 99b7dbf (up to date)
-=======
-import { onMounted, reactive, ref, watch } from 'vue'
-import { convertToThousands } from "../helper"
-import axios from 'axios'
 
-onMounted(() => {
-    getPaymentMethod()
-})
->>>>>>> e4e5cab (up to date)
 
 const paymentMethodLists = ref([
     {
@@ -95,10 +77,7 @@ const paymentMethodLists = ref([
 
 ])
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e4e5cab (up to date)
+
 const getPaymentMethod = async () => {
     const res = await axios.get('/api/payment-method')
     paymentMethodLists.value = res.data
@@ -109,11 +88,6 @@ const getAlamat = async () => {
     addressLists.value = res.data
 }
 
-<<<<<<< HEAD
-=======
->>>>>>> 99b7dbf (up to date)
-=======
->>>>>>> e4e5cab (up to date)
 
 const addressLists = ref([
     {
