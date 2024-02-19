@@ -105,7 +105,6 @@ class SalesCtr extends Controller
 
                 $data = DB::table('sale_details')
                     ->where('sale_id', $saleIds->id)
-                    ->where('index', $match_index,) // Hanya data dengan index 1
                     ->get();
 
                 foreach ($data as $item) {
@@ -132,6 +131,8 @@ class SalesCtr extends Controller
                 ]);
             } else {
                 //  "Product variant ID tidak ditemukan!";
+                $highestIndex = DB::table('sale_details')->where('sale_id',  $saleIds->id)
+                    ->max('index');
 
                 $dataProduct =  Product::with('variants')->find($request->product_id);
 
@@ -141,6 +142,7 @@ class SalesCtr extends Controller
                     $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet + $productVariantById->additional_price) - $dataProduct->discount;
                     $salesDetail->total_price_item = ($dataProduct->price + $productVariantById->additional_price);
                     $salesDetail->sale_id = $saleIds->id;
+                    $salesDetail->index = $highestIndex + 1;
                     $salesDetail->quantity = $request->qty;
                     $salesDetail->product_id = $dataProduct->id;
                     $salesDetail->product_variant_id = $variants; // diambil dari looping variants
