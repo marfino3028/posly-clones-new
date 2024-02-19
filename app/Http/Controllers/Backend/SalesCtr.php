@@ -24,7 +24,7 @@ class SalesCtr extends Controller
         // $saleIds = Sale::where('user_id', Auth::user()->id)->first();
         // dd(Auth::user()->id);
         $saleIds = Sale::where('user_id', Auth::user()->id)
-            ->where('statut', '=', 'Belum Bayar')
+            ->where('statut', '=', 'unpaid')
             ->first();
         // return $saleIds;
         if (!$saleIds) {
@@ -62,8 +62,8 @@ class SalesCtr extends Controller
                 ->value('totalXQty');
 
             $sales->GrandTotal = $grandTotal;
-            $sales->payment_statut = "Belum Bayar";
-            $sales->statut = "Belum Bayar";
+            $sales->payment_statut = "unpaid";
+            $sales->statut = "unpaid";
             $sales->save();
 
             return response()->json([
