@@ -19,18 +19,12 @@ class SalesCtr extends Controller
     public function Create(Request $request)
     {
 
-        $product_variant_id = json_encode($request->product_variant_id);
-
-        // totalAdditionalPrice
-        $totalAdditionalPrice = DB::table('product_variants')
-            ->whereIn('id', $request->product_variant_id)
-            ->sum('additional_price');
 
         // get sale by user id
         // $saleIds = Sale::where('user_id', Auth::user()->id)->first();
         // dd(Auth::user()->id);
         $saleIds = Sale::where('user_id', Auth::user()->id)
-            ->where('statut', '=', 'unpaid')
+            ->where('statut', '=', 'Belum Bayar')
             ->first();
         // return $saleIds;
         if (!$saleIds) {
@@ -68,8 +62,8 @@ class SalesCtr extends Controller
                 ->value('totalXQty');
 
             $sales->GrandTotal = $grandTotal;
-            $sales->payment_statut = "unpaid";
-            $sales->statut = "unpaid";
+            $sales->payment_statut = "Belum Bayar";
+            $sales->statut = "Belum Bayar";
             $sales->save();
 
             return response()->json([
@@ -77,105 +71,55 @@ class SalesCtr extends Controller
                 'data' => $sales,
             ]);
         } else {
-            return 1;
 
-            // jika array tidak kosong
-            // Ambil semua SaleDetail yang terkait dengan Sale yang memiliki id dalam array $saleIds
-            // $saleDetailById = SaleDetail::where('sale_id', $saleIds->id)->get();
-            // $saleDetailById = SaleDetail::where('sale_id', $saleIds->id)
-            //     ->pluck('product_variant_id')
-            //     ->map(function ($value) {
-            //         return (int) $value;
-            //     })
-            //     ->toArray();
-            $saleDetailsGrouped = SaleDetail::orderBy('created_at')
-                ->get()
-                ->groupBy(function ($detail) {
-                    return $detail->created_at->format('Y-m-d H:i:s'); // Mengelompokkan berdasarkan tanggal, jam, dan detik created_at
-                })
-                ->values();
-            // return $saleDetailsGrouped[1];
+            // 1. Ambil seluruh data diurutkan berdasarkan index dan di-filter berdasarkan sale_id
+            $data = DB::table('sale_details')
+                ->where('sale_id', $saleIds->id)
+                ->orderBy('index')
+                ->get();
 
+            // 2. Buat array dari gabungan product_variant_id untuk setiap index yang sama
+            $combinedData = [];
+            foreach ($data as $item) {
+                $index = $item->index;
+                $productVariantId = $item->product_variant_id;
 
+                if (!isset($combinedData[$index])) {
+                    $combinedData[$index] = [];
+                }
 
-            // return $productVariantIdsArray;
-            // old// 
-
-            $saleDetailById = SaleDetail::where('sale_id', $saleIds->id)->get();
-            // $productVariantIds = $saleDetailById->pluck('product_variant_id')->toArray();
-            $productVariantIds = array_map('intval', $saleDetailById->pluck('product_variant_id')->toArray());
-            // return $productVariantIds;
-            // old// 
-
-
-            $productVariantIdsGrouped = $saleDetailsGrouped->map(function ($group) {
-                return $group->pluck('product_variant_id')->map(function ($id) {
-                    return (int) $id;
-                })->toArray();
-            });
-            $productVariantIdsArray = $productVariantIdsGrouped->values()->toArray();
-            // return $productVariantIdsArray;
-            $product_variant_id = $request->product_variant_id;
-
-            $isProductVariantIdMatched = false;
-
-            // Loop melalui setiap SaleDetail
-            $matchedIds = ''; // Array untuk menyimpan ID yang cocok
-
-            foreach ($productVariantIdsArray as $index => $saleDetail) {
-                // return $index;
-                // Memeriksa jika product_variant_id sama dengan nilai yang diinginkan
-                if ($saleDetail == $product_variant_id) {
-                    $matchedIds = $index;
-                    // Jika ditemukan, atur variabel pengecekan menjadi true dan keluar dari loop
+                // Konversi product_variant_id menjadi integer
+                $combinedData[$index][] = (int)$productVariantId;
+            }
+            // Memeriksa apakah ada cocok antara array dalam permintaan dan array yang Anda miliki
+            $isProductVariantIdMatched = '';
+            $match_index = '';
+            foreach ($combinedData as $index => $variants) {
+                if (count(array_intersect($request->product_variant_id, $variants)) === count($request->product_variant_id)) {
                     $isProductVariantIdMatched = true;
-                    break;
+                    $match_index = $index;
                 }
             }
-            // return $matchedIds;
-
-
-            // Jika ada yang cocok, $matchedIds akan berisi ID yang sesuai
-            if (!empty($matchedIds)) {
-                // Lakukan apa pun yang perlu Anda lakukan dengan $matchedIds
-                // Misalnya, mencetaknya atau menggunakan data tersebut untuk tujuan lain
-                // print_r($matchedIds);
-                // return $matchedIds;
-                return $productVariantIdsArray[$matchedIds];
-            } else {
-                // Penanganan jika tidak ada yang cocok
-                // Misalnya, pengembalian respons atau tindakan lainnya
-            }
-            // foreach ($productVariantIdsArray as $saleDetail) {
-            //     // return $product_variant_id;
-            //     return $saleDetail;
-
-            //     // Memeriksa jika product_variant_id sama dengan nilai yang diinginkan
-            //     if ($productVariantIds == $product_variant_id) {
-            //         return 1;
-            //         // Jika ditemukan, atur variabel pengecekan menjadi true dan keluar dari loop
-            //         $isProductVariantIdMatched = true;
-            //         break;
-            //     }
-            // }
-
-            // Melakukan pengecekan hasil
+            // // Melakukan pengecekan hasil
             if ($isProductVariantIdMatched) {
 
-                //  "Product variant ID ditemukan!";
-                $dataProduct =  Product::with('variants')->find($request->product_id);
+                $data = DB::table('sale_details')
+                    ->where('sale_id', $saleIds->id)
+                    ->where('index', $match_index,) // Hanya data dengan index 1
+                    ->get();
 
-                // looping setiap sale detail nya 
-                foreach ($saleDetailById as $saleDetails) {
-                    // return $saleDetails->id;
-                    $salesDetail = SaleDetail::find($saleDetails->id);
-                    $salesDetail->quantity = $saleDetail->quantity + $request->qty;
-                    $salesDetail->save();
+                foreach ($data as $item) {
+                    DB::table('sale_details')
+                        ->where('id', $item->id) // Sesuaikan dengan primary key yang tepat
+                        ->update([
+                            'quantity' => $item->quantity + $request->qty
+                        ]);
                 }
 
                 $grandTotal = DB::table('sales')
                     ->join('sale_details', 'sales.id', '=', 'sale_details.sale_id')
                     ->where('sales.id', '=', $saleIds->id)
+                    ->groupBy('sale_details.index') // Mengelompokkan berdasarkan index
                     ->selectRaw('SUM(sale_details.total * sale_details.quantity) as totalXQty')
                     ->value('totalXQty');
                 $saleIds->GrandTotal = $grandTotal;
@@ -187,7 +131,6 @@ class SalesCtr extends Controller
                     'data' => $saleIds,
                 ]);
             } else {
-                return 3;
                 //  "Product variant ID tidak ditemukan!";
 
                 $dataProduct =  Product::with('variants')->find($request->product_id);
@@ -197,7 +140,7 @@ class SalesCtr extends Controller
                     $salesDetail = new SaleDetail();
                     $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet + $productVariantById->additional_price) - $dataProduct->discount;
                     $salesDetail->total_price_item = ($dataProduct->price + $productVariantById->additional_price);
-                    $salesDetail->sale_id = $sales->id;
+                    $salesDetail->sale_id = $saleIds->id;
                     $salesDetail->quantity = $request->qty;
                     $salesDetail->product_id = $dataProduct->id;
                     $salesDetail->product_variant_id = $variants; // diambil dari looping variants
@@ -207,22 +150,12 @@ class SalesCtr extends Controller
                     $salesDetail->discount = $dataProduct->discount;
                     $salesDetail->save();
                 }
-                // $salesDetail = new SaleDetail();
-                // $salesDetail->total = ($dataProduct->price + $dataProduct->TaxNet) - $dataProduct->discount;
-                // $salesDetail->total_price_item = ($dataProduct->price + $totalAdditionalPrice);
-                // $salesDetail->sale_id = $saleIds->id;
-                // $salesDetail->quantity = $request->qty;
-                // $salesDetail->product_id = $dataProduct->id;
-                // $salesDetail->product_variant_id = $product_variant_id;
-                // $salesDetail->price = $dataProduct->price;
-                // $salesDetail->imei_number = $dataProduct->imei_number ?? null;
-                // $salesDetail->TaxNet = $dataProduct->TaxNet;
-                // $salesDetail->discount = $dataProduct->discount;
-                // $salesDetail->save();
+
 
                 $grandTotal = DB::table('sales')
                     ->join('sale_details', 'sales.id', '=', 'sale_details.sale_id')
                     ->where('sales.id', '=', $saleIds->id)
+                    ->groupBy('sale_details.index') // Mengelompokkan berdasarkan index
                     ->selectRaw('SUM(sale_details.total * sale_details.quantity) as totalXQty')
                     ->value('totalXQty');
                 $saleIds->GrandTotal = $grandTotal;
@@ -254,6 +187,7 @@ class SalesCtr extends Controller
             });
             return $sale;
         });
+        return $data;
 
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
