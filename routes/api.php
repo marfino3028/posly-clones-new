@@ -39,9 +39,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-Route::get('/products', [HomeCtr::class, 'index']);
-Route::get('/product/{id}', [HomeCtr::class, 'detail']);
-
 Route::middleware(['auth:api'])->group(function () {
   Route::post('/sales', [SalesCtr::class, 'create']);
   Route::get('/sales-detail', [SalesCtr::class, 'salesDetail']);

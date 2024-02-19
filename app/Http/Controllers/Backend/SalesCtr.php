@@ -258,9 +258,8 @@ class SalesCtr extends Controller
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
             foreach ($sale->details as $detail) {
-                $productVariantIds = json_decode($detail->product_variant_id);
 
-                $variants = ProductVariant::whereIn('id', $productVariantIds)->where('product_id', '=', $detail->product_id)->get();
+                $variants = ProductVariant::where('id', $detail->product_variant_id)->where('product_id', '=', $detail->product_id)->get();
 
                 // Menambahkan data varian ke dalam detail
                 $detail->variants = $variants;
