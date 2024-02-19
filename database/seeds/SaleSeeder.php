@@ -33,7 +33,7 @@ class SaleSeeder extends Seeder
                     'paid_amount' => 150000,
                     'payment_statut' => '',
                     'transfer_evidence' => '',
-                    'statut' => '',
+                    'statut' => 'unpaid',
                     'notes' => '',
                     'is_purchase_order' => 1,
                     'created_at' => now(),

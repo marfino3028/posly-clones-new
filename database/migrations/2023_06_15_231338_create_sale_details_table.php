@@ -16,6 +16,7 @@ class CreateSaleDetailsTable extends Migration {
 		Schema::create('sale_details', function(Blueprint $table)
 		{
 			$table->integer('id', true);
+			$table->integer('index' )->nullable();
 			$table->dateTime('date');
 			$table->integer('sale_id')->index('Details_Sale_id');
 			$table->integer('product_id')->index('sale_product_id');
