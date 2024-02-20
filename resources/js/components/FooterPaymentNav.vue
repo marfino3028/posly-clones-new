@@ -12,9 +12,34 @@
     </div>
 </template>
 <script setup>
+import axios from 'axios'
 
-const onClickPayNow = () => {
-    window.location.href = "/success"
+const onClickPayNow = async () => {
+
+    const saleId = JSON.parse(localStorage.getItem('cart'))?.[0]?.id
+    const alamatId = JSON.parse(localStorage.getItem('form')).address
+    const paymentMethodId = JSON.parse(localStorage.getItem('form')).paymentMethod
+
+    const res = await axios.post('/api/payment-now', {
+        sale_id: saleId,
+        alamat_id: alamatId,
+        payment_method_id: paymentMethodId
+    }, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token-ecommerce')}`
+        }
+    }).then(response => {
+        console.log(response)
+
+        window.location.href = "/success"
+    }).catch(error => {
+        console.log(error)
+    })
+
+
+
+
+
 }
 
 </script>

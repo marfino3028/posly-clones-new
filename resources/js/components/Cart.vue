@@ -2,19 +2,19 @@
     <section>
         <div class="custom-container">
             <ul class="cart-list">
-                <li v-for="product in products" :key="product.id">
+                <!-- {{ products }} -->
+                <li v-for="product in products?.[0]?.details" :key="product.id">
                     <div class="cart-box">
                         <a href="{{ url('/product') }}" class="product-image shadow-sm border">
-                            <img src="{{ asset('assets/asset_frontend/images/ecommerce/product/6.jpg') }}" class="img-fluid"
-                                alt="">
+                            <img :src="product.product.image" class="img-fluid" alt="">
                         </a>
                         <div class="product-content">
                             <div>
                                 <a href="{{ url('/product') }}">
-                                    <h5 class="name">Pink Hoodie t-shirt full | Merah</h5>
+                                    <h5 class="name">{{ product.product.name }}</h5>
                                 </a>
-                                <h5 class="size">Size: S</h5>
-                                <h5 class="qty">Quantity: 1</h5>
+                                <!-- <h5 class="size">Size: S</h5> -->
+                                <h5 class="qty">Quantity: {{ product.quantity }}</h5>
                             </div>
                             <div>
                                 <ul class="option">
@@ -29,7 +29,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                                <h4>$25.00</h4>
+                                <h4>{{ `Rp ` + convertToThousands(product.price) }}</h4>
                             </div>
                         </div>
                     </div>
@@ -37,45 +37,46 @@
             </ul>
         </div>
     </section>
-    <order-detail-vue></order-detail-vue>
+    <order-detail-vue :data="products"></order-detail-vue>
 </template>
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
+import { convertToThousands } from "../helper"
 
 const products = ref([
-    {
-        id: 1,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 2,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 3,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    },
-    {
-        id: 4,
-        name: 'Pink Hoodie t-shirt full',
-        size: 'S',
-        qty: 1,
-        price: 25,
-        image: 'https://via.placeholder.com/150'
-    }
+    // {
+    //     id: 1,
+    //     name: 'Pink Hoodie t-shirt full',
+    //     size: 'S',
+    //     qty: 1,
+    //     price: 25,
+    //     image: 'https://via.placeholder.com/150'
+    // },
+    // {
+    //     id: 2,
+    //     name: 'Pink Hoodie t-shirt full',
+    //     size: 'S',
+    //     qty: 1,
+    //     price: 25,
+    //     image: 'https://via.placeholder.com/150'
+    // },
+    // {
+    //     id: 3,
+    //     name: 'Pink Hoodie t-shirt full',
+    //     size: 'S',
+    //     qty: 1,
+    //     price: 25,
+    //     image: 'https://via.placeholder.com/150'
+    // },
+    // {
+    //     id: 4,
+    //     name: 'Pink Hoodie t-shirt full',
+    //     size: 'S',
+    //     qty: 1,
+    //     price: 25,
+    //     image: 'https://via.placeholder.com/150'
+    // }
 ])
 
 const removeProduct = (id) => {
@@ -91,6 +92,8 @@ const fetchCart = async () => {
         }
     )
     products.value = res.data
+
+    console.log(products.value)
 }
 
 onMounted(async () => {

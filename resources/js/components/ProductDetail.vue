@@ -1,5 +1,5 @@
 <template>
-    <div v-if="productDetail">
+    <div v-if="productDetail" class="form-style-1">
         <!-- Product Image Section Start -->
         <section>
             <div class="custom-container">
@@ -55,7 +55,8 @@
                     </div> -->
                     </div>
                     <div class="product-price">
-                        <h3>Rp {{ convertToThousands(productDetail?.product_details?.price || 0) }}</h3>
+                        <h3>Rp {{ convertToThousands(parseInt(productDetail?.product_details?.price) + parseInt(colorCost) +
+                            parseInt(sizeCost) + parseInt(variantCost) || 0) }}</h3>
                         <!-- <h6>$28.00</h6> -->
                     </div>
                 </div>
@@ -348,7 +349,7 @@ import axios from "axios";
 //         ],
 //     ],
 
-import { reactive, ref, watchEffect, onMounted, computed } from "vue";
+import { reactive, ref, watchEffect, onMounted, computed, watch } from "vue";
 import { convertToThousands } from "../helper"
 
 
@@ -460,10 +461,36 @@ const variantOpt = computed(() => {
     return productDetail?.value?.variants?.filter((item) => item.variant_attribute_id === 3)
 });
 
+const colorCost = ref(0)
+const sizeCost = ref(0)
+const variantCost = ref(0)
+watch(form, (value) => {
+    console.log(value);
+
+    if (value.color) {
+        const color = colorOpt.value.find((item) => item.id === value.color);
+        colorCost.value = color?.additional_price || 0;
+        console.log('color', color);
+    }
+
+    if (value.size) {
+        const size = sizeOpt.value.find((item) => item.id === value.size);
+        sizeCost.value = size?.additional_price || 0;
+        console.log('size', size);
+    }
+
+    if (value.variant) {
+        const variant = variantOpt.value.find((item) => item.id === value.variant);
+        variantCost.value = variant?.additional_price || 0;
+        console.log('variant', variant);
+    }
+
+    // color cost 
+}, { deep: true });
+
+
 watchEffect(() => {
-
     form.productId = productDetail?.value?.product_details?.id;
-
     localStorage.setItem("cart", JSON.stringify(form));
 });
 
