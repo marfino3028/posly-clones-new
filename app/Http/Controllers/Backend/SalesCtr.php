@@ -173,7 +173,6 @@ class SalesCtr extends Controller
 
     public function salesDetail()
     {
-
         $data = Sale::with('details', 'details.product')
             ->where('user_id', Auth::user()->id)
             ->withSum('details as total_price_items', 'total_price_item')
@@ -189,7 +188,6 @@ class SalesCtr extends Controller
             });
             return $sale;
         });
-        return $data;
 
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
@@ -207,7 +205,8 @@ class SalesCtr extends Controller
         ]);
     }
 
-    function eraseSalesDetail($id)  {
+    function eraseSalesDetail($id)
+    {
         try {
             $saleDetail = SaleDetail::findOrFail($id);
             $saleDetail->delete();
