@@ -175,6 +175,7 @@ class SalesCtr extends Controller
     {
         $data = Sale::with('details', 'details.product')
             ->where('user_id', Auth::user()->id)
+            ->where('statut', 'unpaid')
             ->withSum('details as total_price_items', 'total_price_item')
             ->get();
 
