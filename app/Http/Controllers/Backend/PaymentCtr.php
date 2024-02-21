@@ -77,7 +77,7 @@ class PaymentCtr extends Controller
 
     public function orderSummary()
     {
-        $data = Sale::with('payment_method','alamat', 'details', 'details.product')->where('user_id', Auth::user()->id)->get();
+        $data = Sale::with('payment_method','alamat', 'details', 'details.product')->where('user_id', Auth::user()->id)->first();
 
         // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
         foreach ($data as $sale) {
