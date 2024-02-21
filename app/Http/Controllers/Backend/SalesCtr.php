@@ -75,6 +75,7 @@ class SalesCtr extends Controller
             // 1. Ambil seluruh data diurutkan berdasarkan index dan di-filter berdasarkan sale_id
             $data = DB::table('sale_details')
                 ->where('sale_id', $saleIds->id)
+                ->where('product_id', $request->product_id)
                 ->orderBy('index')
                 ->get();
 
