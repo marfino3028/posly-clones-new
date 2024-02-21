@@ -95,4 +95,24 @@ class PaymentCtr extends Controller
             'data' => $data,
         ]);
     }
+    public function allOrderSummary()
+    {
+        $data = Sale::with('payment_method','alamat', 'details', 'details.product')->where('user_id', Auth::user()->id)->orderBy('created_at','desc')->get();
+
+        // Mendapatkan data varian berdasarkan product_variant_id yang ada di setiap detail
+        foreach ($data as $sale) {
+            foreach ($sale->details as $detail) {
+                // $productVariantIds = json_decode($detail->product_variant_id);
+
+                $variants = ProductVariant::where('id', $detail->product_variant_id)->get();
+
+                // Menambahkan data varian ke dalam detail
+                $detail->variants = $variants;
+            }
+        }
+        return response()->json([
+            'message' => 'Get data successfully',
+            'data' => $data,
+        ]);
+    }
 }

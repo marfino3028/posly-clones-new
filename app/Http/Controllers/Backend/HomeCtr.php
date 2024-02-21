@@ -29,6 +29,14 @@ class HomeCtr extends Controller
             "categoryProducts" => $categoryProducts,
         ], 200);
     }
+    public function indexCategory()
+    {
+        $categoryProducts = Category::select('id', 'name')->get();
+
+        return response()->json([
+            "data" => $categoryProducts,
+        ], 200);
+    }
 
 
     public function detail($id)

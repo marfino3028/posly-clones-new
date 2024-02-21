@@ -206,4 +206,15 @@ class SalesCtr extends Controller
             'data' => $data,
         ]);
     }
+
+    function eraseSalesDetail($id)  {
+        try {
+            $saleDetail = SaleDetail::findOrFail($id);
+            $saleDetail->delete();
+
+            return response()->json(['message' => 'Sale detail deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete sale detail'], 500);
+        }
+    }
 }

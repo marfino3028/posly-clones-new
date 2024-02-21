@@ -42,14 +42,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware(['auth:api'])->group(function () {
   Route::post('/sales', [SalesCtr::class, 'create']);
   Route::get('/sales-detail', [SalesCtr::class, 'salesDetail']);
+  Route::post('/erase-sales-detail/{id}', [SalesCtr::class, 'eraseSalesDetail']);
 
   Route::get('/payment', [PaymentCtr::class, 'index']);
   Route::post('/payment-upload', [PaymentCtr::class, 'upload']);
   Route::post('/payment-now', [PaymentCtr::class, 'payNow']);
   Route::get('/order-summary', [PaymentCtr::class, 'orderSummary']);
+  Route::get('/all-order-summary', [PaymentCtr::class, 'allOrderSummary']);
 });
 
 Route::get('/products', [HomeCtr::class, 'index']);
+Route::get('/category-products', [HomeCtr::class, 'indexCategory']);
 Route::get('/product/{id}', [HomeCtr::class, 'detail']);
 
 
