@@ -195,7 +195,7 @@ class SalesCtr extends Controller
         foreach ($data as $sale) {
             foreach ($sale->details as $detail) {
 
-                $variants = ProductVariant::where('id', $detail->product_variant_id)->where('product_id', '=', $detail->product_id)->get();
+                $variants = ProductVariant::with('productAttribute','productAttributeValue')->where('id', $detail->product_variant_id)->where('product_id', '=', $detail->product_id)->get();
 
                 // Menambahkan data varian ke dalam detail
                 $detail->variants = $variants;
